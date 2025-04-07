@@ -1,0 +1,36 @@
+{
+  "name": "smc_mvc",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "g-i-s": "^2.1.7",
+    "gridfs-stream": "^1.1.1",
+    "mongoose": "^8.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9",
+    "razorpay": "^2.9.5",
+    "showdown": "^2.1.0",
+    "stripe": "^17.6.0",
+    "unsplash-js": "^7.0.19",
+    "youtube-search-api": "^1.2.2",
+    "youtube-transcript": "^1.2.1"
+  }
+}
