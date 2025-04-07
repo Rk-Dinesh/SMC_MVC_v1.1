@@ -5,15 +5,16 @@ const transporter = require("../Service/transporter_service");
 exports.createTicket = async (req, res, next) => {
   const {
     user,
-    fname,
-    lname,
-    email,
-    phone,
     category,
     subject,
     desc1,
     priority,
   } = req.body;
+  const userDetails = await User.findOne({ _id: user })
+    if (!userDetails) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    const { fname, lname, email, phone } = userDetails;
   const token = crypto.randomBytes(2).toString("hex");
   const ticketId = `Ticket${token}`;
   try {

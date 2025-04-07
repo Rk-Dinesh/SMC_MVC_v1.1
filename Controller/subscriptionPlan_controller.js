@@ -15,7 +15,7 @@ exports.createSubscriptionPlan = async (req, res) => {
       stripeId,
       duration
     } = req.body;
-    console.log('body',req.body);
+  //  console.log('body',req.body);
     
     const newsubscriptionPlan =
       await SubscriptionPlanService.createSubscriptionPlan({
@@ -29,7 +29,7 @@ exports.createSubscriptionPlan = async (req, res) => {
         stripeId,
         duration
       });
-      console.log("return", newsubscriptionPlan);
+   //   console.log("return", newsubscriptionPlan);
       
     res.status(200).json({
       success: true,

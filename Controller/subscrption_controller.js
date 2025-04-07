@@ -1,3 +1,4 @@
+const User = require("../Model/user_model");
 const SubscriptionService = require("../Service/subscription_service");
 
 exports.getSubscriptionDetails = async (req, res, next) => {
@@ -16,10 +17,6 @@ exports.createUserSubscription = async (req, res, next) => {
   try {
     const {
       user,
-      fname,
-      lname,
-      email,
-      phone,
       amount,
       course,
       subscription,
@@ -29,6 +26,12 @@ exports.createUserSubscription = async (req, res, next) => {
       tax,
       duration
     } = req.body;
+
+    const userDetails = await User.findOne({ _id: user })
+    if (!userDetails) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    const { fname, lname, email, phone } = userDetails;
 
     const newSub = await SubscriptionService.createSubscription(
       user,

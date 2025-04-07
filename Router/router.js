@@ -24,6 +24,7 @@ const EmailController = require("../Controller/email_controller");
 const PaymentController = require("../Controller/payment_controller");
 const AIController = require("../Controller/ai_controller");
 const SubscriptionController = require("../Controller/subscrption_controller");
+const NotesController = require("../Controller/notes_controller");
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -163,5 +164,9 @@ router.post("/api/usersubscription", SubscriptionController.createUserSubscripti
 router.get("/api/getallsubs", SubscriptionController.getAllSubscriptions);
 router.get("/api/getsubsbyid", SubscriptionController.getSubscriptionsByUserId);
 router.get("/api/getsubonid/:id", SubscriptionController.getSubscriptionById);
+
+//notes
+router.post("/api/savenotes", NotesController.saveNotes);
+router.get("/api/getnotes", NotesController.getNotes);
 
 module.exports = router;

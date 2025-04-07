@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpires: { type: Date, default: null },
   verifyToken: { type: String, default: null },
   verifyTokenExpires: { type: Date, default: null },
-  verified: { type: Boolean, default: true },
+  verified: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", userSchema);
