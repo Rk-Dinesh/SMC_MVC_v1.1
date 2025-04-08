@@ -25,6 +25,7 @@ const PaymentController = require("../Controller/payment_controller");
 const AIController = require("../Controller/ai_controller");
 const SubscriptionController = require("../Controller/subscrption_controller");
 const NotesController = require("../Controller/notes_controller");
+const ExamController = require("../Controller/exam_controller");
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -52,7 +53,7 @@ router.post("/api/transcript", AIController.fetchTranscript);
 router.post("/api/chat", AIController.generateChatResponse);
 //send Email
 router.post("/api/data", EmailController.sendEmail);
-// Admin(vishva)
+// Admin
 router.post("/api/adminsignup", AdminController.createAdmin); 
 router.post("/api/verify", AdminController.verifyEmail); 
 router.post("/api/adminsignin", AdminController.signInAdmin); 
@@ -64,7 +65,7 @@ router.delete("/api/deleteadmin/:id", AdminController.deleteAdmin);
 router.put("/api/adminupdate/:id", AdminController.updateAdmin);  
 router.post("/api/adminuploadcsv", upload.single("file"), AdminController.uploadCSV);
 router.post("/api/changepassword", AdminController.changePassword);
-//User (Vishva)
+//User 
 router.post("/api/usersignup", UserController.createUser);  
 router.post("/api/usersignin", UserController.signInUser);  
 router.post("/api/verify", UserController.verifyEmail);   
@@ -129,6 +130,7 @@ router.post("/api/updatecount", countController.decrementCount);
 router.get("/api/getcountplan", countController.getCountByUser); 
 // Course
 router.post("/api/course", courseController.createCourse); 
+router.post("/api/courseshared", courseController.sharedCourse); 
 router.post("/api/update", courseController.updateCourse); 
 router.post("/api/finish", courseController.finishCourse); 
 router.get("/api/courses", courseController.getCourses); 
@@ -168,5 +170,11 @@ router.get("/api/getsubonid/:id", SubscriptionController.getSubscriptionById);
 //notes
 router.post("/api/savenotes", NotesController.saveNotes);
 router.get("/api/getnotes", NotesController.getNotes);
+
+//exam
+router.post("/api/exam", ExamController.generateAIExam);
+router.post("/api/updateresult", ExamController.updateResult);
+router.get("/api/getmyresult", ExamController.getMyResult);
+router.post("/api/sendexammail", ExamController.sendExamMail);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const User = require("../Model/user_model");
 const CourseService = require("../Service/course_service");
 
 exports.createCourse = async (req, res) => {
-  const { user, content, type, mainTopic } = req.body;
+  const { user, content, type, mainTopic,lang } = req.body;
  const userDetails = await User.findOne({ _id: user })
   if (!userDetails) {
     return res.status(404).json({ success: false, message: "User not found" });
@@ -10,7 +10,24 @@ exports.createCourse = async (req, res) => {
   const { fname, lname, email, phone } = userDetails;
 
   try {
-    const newCourse = await CourseService.createCourse({ user, fname, lname, email, phone, content, type, mainTopic });
+    const newCourse = await CourseService.createCourse({ user, fname, lname, email, phone, content, type, mainTopic,lang });
+    await CourseService.sendCourseMail(fname,lname,email,phone, req.body.mainTopic);
+    res.status(200).json({ success: true, message: "Course created successfully", courseId: newCourse._id });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+exports.sharedCourse = async (req, res) => {
+  const { user, content, type, mainTopic,lang } = req.body;
+ const userDetails = await User.findOne({ _id: user })
+  if (!userDetails) {
+    return res.status(404).json({ success: false, message: "User not found" });
+  }
+  const { fname, lname, email, phone } = userDetails;
+
+  try {
+    const newCourse = await CourseService.createCourse({ user, fname, lname, email, phone, content, type, mainTopic,lang });
     await CourseService.sendCourseMail(fname,lname,email,phone, req.body.mainTopic);
     res.status(200).json({ success: true, message: "Course created successfully", courseId: newCourse._id });
   } catch (error) {

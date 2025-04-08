@@ -1,52 +1,72 @@
-require('dotenv').config();
+require("dotenv").config();
 const Course = require("../Model/course_model");
 const { createApi } = require("unsplash-js");
-const transporter = require('./transporter_service');
+const transporter = require("./transporter_service");
+const Language = require("../Model/lang_model");
 const unsplash = createApi({ accessKey: process.env.UNSPLASH_ACCESS_KEY });
 
 exports.createCourse = async (courseData) => {
-    const { mainTopic } = courseData;
-    const result = await unsplash.search.getPhotos({
-      query: mainTopic,
-      page: 1,
-      perPage: 1,
-      orientation: "landscape",
-    });
-    courseData.photo = result.response.results[0].urls.regular;
-    const newCourse = new Course(courseData);
-    return await newCourse.save();
-  };
-  
-  exports.updateCourse = async (courseId, content) => {
-    return await Course.findOneAndUpdate({ _id: courseId }, { $set: { content } }, { new: true });
-  };
-  
-  exports.finishCourse = async (courseId) => {
-    return await Course.findOneAndUpdate(
-      { _id: courseId },
-      { $set: { completed: true, end: Date.now() } },
-      { new: true }
-    );
-  };
-  
-  exports.getCoursesByUser = async (userId) => {
-    return await Course.find({ user: userId });
-  };
+  const { mainTopic } = courseData;
+  const result = await unsplash.search.getPhotos({
+    query: mainTopic,
+    page: 1,
+    perPage: 1,
+    orientation: "landscape",
+  });
+  courseData.photo = result.response.results[0].urls.regular;
+  const newCourse = new Course(courseData);
+  const newLang = new Language({ course: newCourse._id, lang: lang });
+  await newLang.save();
+  return await newCourse.save();
+};
 
-  exports.getAllCourses = async () => {
-    return await Course.find({});
-  };
-  
-  exports.deleteCourse = async (id) => {
-    return await Course.findByIdAndDelete(id);
-  };
-  
-  exports.sendCourseMail = async (email, fname, lname, mainTopic) => {
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Welcome to Seek My Course!",
-      html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+exports.shareCourse = async (courseData) => {
+  const { mainTopic } = courseData;
+  const result = await unsplash.search.getPhotos({
+    query: mainTopic,
+    page: 1,
+    perPage: 1,
+    orientation: "landscape",
+  });
+  courseData.photo = result.response.results[0].urls.regular;
+  const newCourse = new Course(courseData);
+  return await newCourse.save();
+};
+
+exports.updateCourse = async (courseId, content) => {
+  return await Course.findOneAndUpdate(
+    { _id: courseId },
+    { $set: { content } },
+    { new: true }
+  );
+};
+
+exports.finishCourse = async (courseId) => {
+  return await Course.findOneAndUpdate(
+    { _id: courseId },
+    { $set: { completed: true, end: Date.now() } },
+    { new: true }
+  );
+};
+
+exports.getCoursesByUser = async (userId) => {
+  return await Course.find({ user: userId });
+};
+
+exports.getAllCourses = async () => {
+  return await Course.find({});
+};
+
+exports.deleteCourse = async (id) => {
+  return await Course.findByIdAndDelete(id);
+};
+
+exports.sendCourseMail = async (email, fname, lname, mainTopic) => {
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: "Welcome to Seek My Course!",
+    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
                     <html lang="en">
                     
@@ -79,7 +99,7 @@ exports.createCourse = async (courseData) => {
       </tr>
     </table>
   </body>
-</html>`
-    };
-    return await transporter.sendMail(mailOptions);
+</html>`,
   };
+  return await transporter.sendMail(mailOptions);
+};
