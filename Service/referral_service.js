@@ -1,13 +1,7 @@
 const Referral = require("../Model/referralSchema");
+const { generateRandomString } = require("../utils");
 
-function generateRandomString(length) {
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-}
+
 
 exports.createReferralLink = async (referrerName) => {
     try {

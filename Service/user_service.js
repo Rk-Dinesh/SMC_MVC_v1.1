@@ -14,19 +14,24 @@ const csvParser = require("csv-parser");
 const transporter = require("./transporter_service");
 const Referral = require("../Model/referralSchema");
 const mongoose = require("mongoose");
+const { generateRandomString } = require("../utils");
 
 exports.createUser = async (userData) => {
-  const { email, fname, lname, phone, dob, type,referralCode } = userData;
+  const { email, fname, lname, phone, dob, type, referralCode } = userData;
 
- // Handle referral logic
- let referrerId = null;
- let referrerName = null;
+  // Handle referral logic
+  let referrerId = null;
+  let referrerName = null;
 
- if (referralCode) {
-     const referral = await Referral.findOne({ referralCode });
-     referrerId = referral._id;
-     referrerName = referral.referrerName;
- }
+  if (referralCode) {
+    const referral = await Referral.findOne({ referralCode });
+    referrerId = referral._id;
+    referrerName = referral.referrerName;
+  }
+
+  const uniqueIdentifier = generateRandomString(40);
+  const referralCodeUser = `seekmycourse/ref/${fname}/${uniqueIdentifier}`;
+  const referralLink = `http://localhost:5173/signup/?ref=${referralCodeUser}`;
 
   const token = crypto.randomBytes(20).toString("hex");
   const newUser = new User({
@@ -40,16 +45,28 @@ exports.createUser = async (userData) => {
     verifyTokenExpires: Date.now() + 3600000, // Token expires in 1 hour
     referrerId: referrerId || null, // Set to null if no referral code is provided
     referrerName: referrerName || null, // Set to null if no referral code is provided
+    referralLink: referralLink,
     isPaid: false, // Default payment status
   });
 
   await newUser.save();
 
+  const referral = new Referral({
+    referrerId: newUser._id,
+    referrerName: fname,
+    referralCode: referralCodeUser,
+    referralLink: referralLink,
+    referredUsers: [],
+    paidUsers: [],
+  });
+
+  await referral.save();
+
   if (referralCode) {
     const referral = await Referral.findOne({ referralCode });
-    referral.referredUsers.push(newUser._id); 
+    referral.referredUsers.push(newUser._id);
     await referral.save();
-}
+  }
 
   const mailOptions = {
     from: process.env.EMAIL,

@@ -133,6 +133,7 @@ exports.createSubscription = async (
 
     if (referral) {
       referral.paidUsers.push(updatedUser._id);
+      referral.commission += 50; 
       await referral.save();
     }
   }
