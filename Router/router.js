@@ -26,6 +26,10 @@ const AIController = require("../Controller/ai_controller");
 const SubscriptionController = require("../Controller/subscrption_controller");
 const NotesController = require("../Controller/notes_controller");
 const ExamController = require("../Controller/exam_controller");
+const channelController = require("../Controller/channel_controller");
+const messageController = require("../Controller/message_controller");
+const contactsController = require("../Controller/contacts_controller");
+const referralController = require("../Controller/referral_controller");
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -43,6 +47,8 @@ const storage = multer.diskStorage({
   });
   
   const upload = multer({ storage });
+
+  const uploadMessage = multer({ dest: "uploads/files/" });
 
 //AI
 router.post("/api/prompt", AIController.generatePrompt);
@@ -176,5 +182,25 @@ router.post("/api/exam", ExamController.generateAIExam);
 router.post("/api/updateresult", ExamController.updateResult);
 router.get("/api/getmyresult", ExamController.getMyResult);
 router.post("/api/sendexammail", ExamController.sendExamMail);
+
+//channel rouutes
+router.post("/create-channel", channelController.createChannel);
+router.get("/get-user-channels", channelController.getUserChannels);
+router.get("/get-channel-messages/:channelId", channelController.getChannelMessages);
+
+//message routes
+router.post("/get-messages", messageController.getMessages);  
+router.post("/upload-file", uploadMessage.single("file"), messageController.uploadFile);
+
+//contacts routes
+router.get("/all-contacts", contactsController.getAllContacts);
+router.post("/search", contactsController.searchContacts);
+router.get("/get-contacts-for-list", contactsController.getContactsForList);
+
+//referral
+router.post('/admin/create-referral', referralController.createReferral);
+router.get('/api/referral', referralController.getReferralDetails);
+router.get('/api/referral-all', referralController.getReferralAllDetails);
+router.delete('/api/referral/:id', referralController.deleteReferral);
 
 module.exports = router;

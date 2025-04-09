@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema({
   verifyToken: { type: String, default: null },
   verifyTokenExpires: { type: Date, default: null },
   verified: { type: Boolean, default: false },
+  referrerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Referral', default: null }, // Referral document ID
+  referrerName: { type: String, default: null },
+  isPaid: { type: Boolean, default: false } // Payment status
 });
 
 const User = mongoose.model("User", userSchema);

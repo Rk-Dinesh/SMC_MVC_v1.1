@@ -1,27 +1,47 @@
+const Referral = require("../Model/referralSchema");
+const User = require("../Model/user_model");
 const UserService = require("../Service/user_service");
 const path = require("path");
 
 exports.createUser = async (req, res, next) => {
     try {
-        const { email, fname, lname, phone, dob, type } = req.body;
-        const newUser = await UserService.createUser({
-            email,
-            fname,
-            lname,
-            phone,
-            dob,
-            type,
+      const { email, fname, lname, phone, dob, type } = req.body;
+      const referralCode = req.query.ref; // Extract referral code from query parameter
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        res.status(400).json({
+          success: false,
+          message: "User with this email already exists",
         });
-
-        res.status(200).json({
-            success: true,
-            message: "An email has been sent to your account. Please verify.",
-            userId: newUser._id,
-        });
+      }
+      if (referralCode) {
+        const referral = await Referral.findOne({ referralCode });
+        if (!referral) {
+          res.status(400).json({
+            success: false,
+            message: "Invalid referral code",
+          });
+        }
+      }
+      const newUser = await UserService.createUser({
+        email,
+        fname,
+        lname,
+        phone,
+        dob,
+        type,
+        referralCode,
+      });
+  
+      res.status(200).json({
+        success: true,
+        message: "An email has been sent to your account. Please verify.",
+        userId: newUser._id,
+      });
     } catch (error) {
-        next(error);
+      next(error);
     }
-};
+  };
 
 exports.signInUser = async (req, res, next) => {
     try {

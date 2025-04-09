@@ -5,6 +5,7 @@ const User = require("../Model/user_model");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const axios = require("axios");
 const Count = require('../Model/plancount_model');
+const Referral = require('../Model/referralSchema');
 
 
 exports.getSubscriptionDetails = async (uid) => {
@@ -114,22 +115,26 @@ exports.createSubscription = async (
     plan,
     method,
     tax,
-    duration
+    duration,
   });
 
   await newSub.save();
 
-  await User.findOneAndUpdate({ _id: user }, { $set: { type: plan } });
-  const newCount = new Count({
-    user: user,
-    count: course,
-  });
-  const existingUser = await Count.findOne({ user: user });
-  if (existingUser) {
-    existingUser.count = course;
-    await existingUser.save();
-  } else {
-    await newCount.save();
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: user },
+    { $set: { type: plan } },
+    { new: true }
+  );
+
+  if (updatedUser.referrerId && !updatedUser.isPaid) {
+    await User.findByIdAndUpdate(user, { $set: { isPaid: true } });
+
+    const referral = await Referral.findById(updatedUser.referrerId);
+
+    if (referral) {
+      referral.paidUsers.push(updatedUser._id);
+      await referral.save();
+    }
   }
 
   return newSub;

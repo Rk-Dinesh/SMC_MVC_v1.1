@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"nodemon app.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,7 @@
     "nodemon": "^3.1.9",
     "razorpay": "^2.9.5",
     "showdown": "^2.1.0",
+    "socket.io": "^4.8.1",
     "stripe": "^17.6.0",
     "unsplash-js": "^7.0.19",
     "youtube-search-api": "^1.2.2",
