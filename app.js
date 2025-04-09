@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = require("./Router/router");
 const db = require('./Config/db');
-const { default: setupSocket } = require('./socket');
+const { setupSocket } = require('./socket');
 
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(cors({

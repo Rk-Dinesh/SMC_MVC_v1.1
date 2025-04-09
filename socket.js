@@ -1,8 +1,8 @@
-import { Server as SocketIOServer } from "socket.io";
-import Message from "./Model/message_model.js";
-import Channel from "./Model/channel_model.js";
+const { Server: SocketIOServer } = require("socket.io");
+const Message = require("./Model/message_model");
+const Channel = require("./Model/channel_model");
 
-const setupSocket = (server) => {
+exports.setupSocket = (server) => {
   const io = new SocketIOServer(server, {
     cors: {
       origin: process.env.ORIGIN,
@@ -117,4 +117,5 @@ const setupSocket = (server) => {
   });
 };
 
-export default setupSocket;
+
+
