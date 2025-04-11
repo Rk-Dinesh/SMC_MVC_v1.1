@@ -68,6 +68,14 @@ exports.createUser = async (userData) => {
     await referral.save();
   }
 
+  const notifyMail =new Notify( {
+    user: newUser._id,
+    subject: `Welcome message`,
+    description: `Welcome to Pick My Course! Start creating your personalized learning journey today.`,
+  });
+
+  await notifyMail.save();
+
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,
