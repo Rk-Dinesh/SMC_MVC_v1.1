@@ -2,7 +2,7 @@ const User = require("../Model/user_model");
 const CourseService = require("../Service/course_service");
 
 exports.createCourse = async (req, res) => {
-  const { user, content, type, mainTopic,lang } = req.body;
+  const { user, content, type, mainTopic,lang } = req.body; 
  const userDetails = await User.findOne({ _id: user })
   if (!userDetails) {
     return res.status(404).json({ success: false, message: "User not found" });

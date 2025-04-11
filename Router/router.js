@@ -178,7 +178,7 @@ router.post("/api/savenotes", NotesController.saveNotes);
 router.get("/api/getnotes", NotesController.getNotes);
 
 //exam
-router.post("/api/exam", ExamController.generateAIExam);
+router.post("/api/aiexam", ExamController.generateAIExam);
 router.post("/api/updateresult", ExamController.updateResult);
 router.get("/api/getmyresult", ExamController.getMyResult);
 router.post("/api/sendexammail", ExamController.sendExamMail);
