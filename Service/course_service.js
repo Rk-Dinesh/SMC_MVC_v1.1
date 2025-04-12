@@ -6,15 +6,16 @@ const Language = require("../Model/lang_model");
 const unsplash = createApi({ accessKey: process.env.UNSPLASH_ACCESS_KEY });
 
 exports.createCourse = async (courseData) => {
-  const { mainTopic,lang} = courseData;
+  const { user, fname, lname, email, phone, content, type, mainTopic,lang } = courseData;
   const result = await unsplash.search.getPhotos({
     query: mainTopic,
     page: 1,
     perPage: 1,
     orientation: "landscape",
   });
-  courseData.photo = result.response.results[0].urls.regular;
-  const newCourse = new Course(courseData);  
+  const photos = result.response.results;  
+  const photo = photos[0].urls.regular
+  const newCourse = new Course({ user,fname, lname, email, phone, content, type, mainTopic,lang, photo });  
   const newLang = new Language({ course: newCourse._id, lang: lang });
   await newLang.save();
   return await newCourse.save();

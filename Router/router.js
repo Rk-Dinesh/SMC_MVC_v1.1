@@ -81,6 +81,8 @@ router.delete("/api/deleteuser", UserController.deleteUser);
 router.post("/api/emailupdate", UserController.updateEmail);  
 router.post("/api/phoneupdate", UserController.updatePhone);  
 router.post("/api/useruploadcsv", upload.single("file"), UserController.uploadCSV);
+router.post("/api/userprofile", UserController.updateProfile);
+router.post("/api/userbio", UserController.updateBio);
  // Category 
 router.post("/api/category", categoryController.createCategory); 
 router.put("/api/category/:id", categoryController.updateCategory); 
@@ -175,7 +177,7 @@ router.get("/api/getsubonid/:id", SubscriptionController.getSubscriptionById);
 
 //notes
 router.post("/api/savenotes", NotesController.saveNotes);
-router.get("/api/getnotes", NotesController.getNotes);
+router.post("/api/getnotes", NotesController.getNotes);
 
 //exam
 router.post("/api/aiexam", ExamController.generateAIExam);

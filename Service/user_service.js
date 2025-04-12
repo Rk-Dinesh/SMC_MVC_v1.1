@@ -249,3 +249,7 @@ exports.uploadCSV = async (filePath) => {
       .on("error", (error) => reject(error));
   });
 };
+
+exports.updateBio = async (userId,UserData) => {
+    return await User.findByIdAndUpdate(userId, { $set: UserData }, { new: true, upsert: true });
+  };
