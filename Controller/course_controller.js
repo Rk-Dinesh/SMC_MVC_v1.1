@@ -97,6 +97,15 @@ exports.getCourses = async (req, res) => {
   }
 };
 
+exports.getCoursesCompleted = async (req, res) => {
+  try {
+    const courses = await CourseService.getCoursesByUserCompleted(req.query.userId);
+    res.json(courses);
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 exports.getAllCourses = async (req, res) => {
   try {
     const courses = await CourseService.getAllCourses();

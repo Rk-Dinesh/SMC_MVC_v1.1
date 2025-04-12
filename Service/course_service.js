@@ -60,6 +60,10 @@ exports.getCoursesByUser = async (userId) => {
   return await Course.find({ user: userId });
 };
 
+exports.getCoursesByUserCompleted = async (userId) => {
+  return await Course.find({ user: userId,completed:true });
+};
+
 exports.getAllCourses = async () => {
   return await Course.find({});
 };
