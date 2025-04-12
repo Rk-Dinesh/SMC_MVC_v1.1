@@ -37,6 +37,7 @@ exports.createUser = async (req, res, next) => {
         success: true,
         message: "An email has been sent to your account. Please verify.",
         userId: newUser._id,
+        type: newUser.type,
       });
     } catch (error) {
       next(error);
@@ -200,13 +201,13 @@ exports.uploadCSV = async (req, res, next) => {
 };
 
 exports.updateBio = async (req, res) => {
-    const { user,about,Facebook,Twitter,Instagram,LinkedIn } = req.body;
+    const { user,about,facebook,twitter,instagram,linkedIn } = req.body;
     
   try {
     if (!user) {
       return res.status(400).json({ success: false, message: "User ID is required" });
     }
-    const updatedUserBio = await UserService.updateBio(user,{about,Facebook,Twitter,Instagram,LinkedIn});
+    const updatedUserBio = await UserService.updateBio(user,{about,facebook,twitter,instagram,linkedIn});
     res.json({ success: true, message: "User Bio updated successfully", data: updatedUserBio });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -220,7 +221,7 @@ exports.updateProfile = async (req, res) => {
     if (!user) {
       return res.status(400).json({ success: false, message: "User ID is required" });
     }
-    const updatedUserProfile = await UserService.updateBio(user,{about,goals,resource,experience,skills,areaOfInterest});
+    const updatedUserProfile = await UserService.updateBio(user,{goals,resource,experience,skills,areaOfInterest});
     res.json({ success: true, message: "User Profile updated successfully", data: updatedUserProfile });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });

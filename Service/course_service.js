@@ -7,14 +7,15 @@ const unsplash = createApi({ accessKey: process.env.UNSPLASH_ACCESS_KEY });
 
 exports.createCourse = async (courseData) => {
   const { user, fname, lname, email, phone, content, type, mainTopic,lang } = courseData;
-  const result = await unsplash.search.getPhotos({
-    query: mainTopic,
-    page: 1,
-    perPage: 1,
-    orientation: "landscape",
-  });
-  const photos = result.response.results;  
-  const photo = photos[0].urls.regular
+  // const result = await unsplash.search.getPhotos({
+  //   query: mainTopic,
+  //   page: 1,
+  //   perPage: 1,
+  //   orientation: "landscape",
+  // });
+  // const photos = result.response.results; 
+  // const photo = photos[0].urls.regular;
+  const photo = "https://images.unsplash.com/photo-1635477906625-ef1aea584e17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxrb2VuaWdzZWdnJTIwYWdlcmElMjByfGVufDB8MHx8fDE3MzI2ODgwODd8MA&ixlib=rb-4.0.3&q=80&w=1080"
   const newCourse = new Course({ user,fname, lname, email, phone, content, type, mainTopic,lang, photo });  
   const newLang = new Language({ course: newCourse._id, lang: lang });
   await newLang.save();
@@ -35,11 +36,16 @@ exports.shareCourse = async (courseData) => {
 };
 
 exports.updateCourse = async (courseId, content) => {
-  return await Course.findOneAndUpdate(
+
+  const course = await Course.findOneAndUpdate(
     { _id: courseId },
     { $set: { content } },
     { new: true }
   );
+  console.log(course);
+  return course;
+  
+  
 };
 
 exports.finishCourse = async (courseId) => {
@@ -62,7 +68,7 @@ exports.deleteCourse = async (id) => {
   return await Course.findByIdAndDelete(id);
 };
 
-exports.sendCourseMail = async ( fname, lname,email, mainTopic) => {
+exports.sendCourseMail = async ( fname, lname,email, mainTopic) => {  
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,
