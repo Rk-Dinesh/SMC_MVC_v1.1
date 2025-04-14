@@ -38,6 +38,7 @@ exports.createUser = async (req, res, next) => {
         message: "An email has been sent to your account. Please verify.",
         userId: newUser._id,
         type: newUser.type,
+        userName :`${newUser.fname} ${newUser.lname}`,
       });
     } catch (error) {
       next(error);
@@ -54,6 +55,7 @@ exports.signInUser = async (req, res, next) => {
             success: true,
             message: "Sign-in successful",
             userId: user,
+            userName :`${user.fname} ${user.lname}`,
         });
     } catch (error) {
         next(error);

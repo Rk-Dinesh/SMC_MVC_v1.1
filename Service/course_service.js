@@ -42,7 +42,6 @@ exports.updateCourse = async (courseId, content) => {
     { $set: { content } },
     { new: true }
   );
-  console.log(course);
   return course;
   
   

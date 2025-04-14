@@ -30,6 +30,7 @@ const channelController = require("../Controller/channel_controller");
 const messageController = require("../Controller/message_controller");
 const contactsController = require("../Controller/contacts_controller");
 const referralController = require("../Controller/referral_controller");
+const bankDetailsController = require("../Controller/acc_details_controller");
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -205,5 +206,10 @@ router.post('/admin/create-referral', referralController.createReferral);
 router.get('/api/referral', referralController.getReferralDetails);
 router.get('/api/referral-all', referralController.getReferralAllDetails);
 router.delete('/api/referral/:id', referralController.deleteReferral);
+
+//bankdetails
+router.post("/api/bankdetails", bankDetailsController.postBankDetails);
+router.get("/api/getbankdetails", bankDetailsController.getAllAccountDetails);
+router.get("/api/getbankdetailsbyuser", bankDetailsController.getAccountDetailsByUser);
 
 module.exports = router;

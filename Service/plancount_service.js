@@ -4,7 +4,7 @@ exports.createOrUpdateCount = async (user, count) => {
   const existingUser = await Count.findOne({ user });
 
   if (existingUser) {
-    existingUser.count = count;
+    existingUser.count += count;
     return await existingUser.save();
   }
 

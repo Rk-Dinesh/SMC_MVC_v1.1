@@ -9,8 +9,8 @@ exports.getAllNotifications = async () => {
     return await Notify.find();
 };
 
-exports.getNotificationsByUser = async (user) => {
-    return await Notify.find({ user });
+exports.getNotificationsByUser  = async (user) => {
+    return await Notify.find({ user }).sort({ createdAt: -1 });
 };
 
 exports.updateNotificationsByUser = async (user) => {
