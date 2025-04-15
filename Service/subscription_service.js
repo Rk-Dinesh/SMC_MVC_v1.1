@@ -126,6 +126,12 @@ exports.createSubscription = async (
     { new: true }
   );
 
+  const Acuser = await User.findById(user);
+  if (Acuser) { 
+    Acuser.totalCourses += course;
+    await Acuser.save();
+  }
+
   if (updatedUser.referrerId && !updatedUser.isPaid) {
     await User.findByIdAndUpdate(user, { $set: { isPaid: true } });
 

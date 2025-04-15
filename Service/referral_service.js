@@ -41,6 +41,22 @@ exports.getReferralDetails = async (referralCode) => {
     }
 };
 
+exports.getReferralDetailsId = async (referrerId) => {
+    try {
+        const referral = await Referral.findOne({ referrerId })
+            // .populate('referredUsers') 
+            // .populate('paidUsers');  
+
+        if (!referral) {
+            throw new Error('Referral not found.');
+        }
+
+        return referral;
+    } catch (error) {
+        throw new Error(`Failed to fetch referral details: ${error.message}`);
+    }
+};
+
 exports.getReferralAllDetails = async () => {
     try {
         const referral = await Referral.find()

@@ -6,6 +6,7 @@ const policiesSchema = new mongoose.Schema({
   cancel: { type: String, default: "" },
   refund: { type: String, default: "" },
   billing: { type: String, default: "" },
+  refer: { type: String, default: "" },
 });
 
 const Policies = mongoose.model("Policy", policiesSchema);

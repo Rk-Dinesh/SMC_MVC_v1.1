@@ -1,10 +1,10 @@
 const PolicyService = require("../Service/policy_service");
 
 exports.updatePolicy = async (req, res) => {
-    const { terms, privacy, cancel, refund, billing } = req.body;
+    const { terms, privacy, cancel, refund, billing,refer } = req.body;
     
   try {
-    const updatedPolicy = await PolicyService.updatePolicy({terms, privacy, cancel, refund, billing});
+    const updatedPolicy = await PolicyService.updatePolicy({terms, privacy, cancel, refund, billing,refer});
     res.json({ success: true, message: "Policy updated successfully", data: updatedPolicy });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });

@@ -204,6 +204,7 @@ router.get("/get-contacts-for-list", contactsController.getContactsForList);
 //referral
 router.post('/admin/create-referral', referralController.createReferral);
 router.get('/api/referral', referralController.getReferralDetails);
+router.get('/api/referralbyid', referralController.getReferralDetailsbyId);
 router.get('/api/referral-all', referralController.getReferralAllDetails);
 router.delete('/api/referral/:id', referralController.deleteReferral);
 

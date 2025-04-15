@@ -33,6 +33,26 @@ exports.getReferralDetails = async (req, res, next) => {
   }
 };
 
+exports.getReferralDetailsbyId = async (req, res, next) => {
+  try {
+    const { referrerId } = req.query;
+
+    if (!referrerId) {
+      return res.status(400).json({ error: "Referral ID is required." });
+    }
+    const referralDetailsbyId = await ReferralService.getReferralDetailsId(
+      referrerId
+    );
+    res.status(200).json({
+      success: true,
+      message: "Referral details fetched successfully.",
+      data: referralDetailsbyId,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getReferralAllDetails = async (req, res, next) => {
   try {
     const referralDetails = await ReferralService.getReferralAllDetails();
