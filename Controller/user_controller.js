@@ -39,6 +39,7 @@ exports.createUser = async (req, res, next) => {
         userId: newUser._id,
         type: newUser.type,
         userName :`${newUser.fname} ${newUser.lname}`,
+        totalCourse : newUser.totalCourses,
       });
     } catch (error) {
       next(error);
@@ -56,6 +57,7 @@ exports.signInUser = async (req, res, next) => {
             message: "Sign-in successful",
             userId: user,
             userName :`${user.fname} ${user.lname}`,
+            totalCourse : user.totalCourses,
         });
     } catch (error) {
         next(error);
