@@ -40,9 +40,9 @@ exports.createOTP = async ({ email, fname, lname }) => {
             <table align="center" role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" style="max-width:37.5em;margin-left:auto;margin-right:auto;margin-top:40px;margin-bottom:40px;width:465px;border-radius:0.25rem;border-width:1px;border-style:solid;border-color:rgb(234,234,234);padding:20px">
               <tr style="width:100%">
                 <td>
-                  <h1 style="margin-left:0px;margin-right:0px;margin-top:30px;margin-bottom:30px;padding:0px;text-align:center;font-size:24px;font-weight:400;color:rgb(0,0,0)">Welcome to <strong>PickMyCourse</strong></h1>
+                  <h1 style="margin-left:0px;margin-right:0px;margin-top:30px;margin-bottom:30px;padding:0px;text-align:center;font-size:24px;font-weight:400;color:rgb(0,0,0)">Welcome to <strong>SeekMyCourse</strong></h1>
                   <p style="font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">Hi <strong>${fname} ${lname}</strong>,</p>
-                  <p style="font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">Welcome to <strong>PickMyCourse !</strong>, </p>
+                  <p style="font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">Welcome to <strong>SeekMyCourse !</strong>, </p>
                   <p style="margin-left:0px;margin-right:0px;margin-top:5px;margin-bottom:5px;padding:0px;font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">We have received a request to update your email address associated with your account. To proceed with this request, please use the One-Time Password (OTP) provided below:</p>
                    <p style="margin-left:0px;margin-right:0px;margin-top:5px;margin-bottom:5px;padding:0px;font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">Your OTP:<strong> ${otp} </strong></p>
                     <p style="margin-left:0px;margin-right:0px;margin-top:5px;margin-bottom:5px;padding:0px;font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">This OTP is valid for a limited time and will expire in 5 minutes. Please enter this code in the designated field to complete your email update.</p>                          

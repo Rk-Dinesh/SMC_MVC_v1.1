@@ -58,7 +58,7 @@ exports.createTicket = async (req, res, next) => {
                   <p style="font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">Thank you for contacting <strong>Seek My Course</strong>  Support! We appreciate you reaching out to us.</p>
                   <p style="font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">We understand you're experiencing an issue with <strong> ${ticket.subject} </strong>. Our team is currently reviewing your request and will be in touch within 1 business day to assist you further</p>
                   <p style="font-size:14px;line-height:10px;margin:16px 0;color:rgb(0,0,0)">You may also find helpful information in our Help Center:</p>
-                  <p style="margin-left:0px;margin-right:0px;margin-top:5px;margin-bottom:5px;padding:0px;font-size:14px;line-height:10px;margin:16px 0;color:rgb(78, 166, 226)"><a href="https://helpcenter.pickmycourseai.support/" target="_blank" >https://helpcenter.pickmycourseai.support/</a></p>
+                  <p style="margin-left:0px;margin-right:0px;margin-top:5px;margin-bottom:5px;padding:0px;font-size:14px;line-height:10px;margin:16px 0;color:rgb(78, 166, 226)"><a href="https://seekmycourse.support/" target="_blank" >https://seekmycourse.support/</a></p>
                   <p style="font-size:14px;line-height:24px;margin:16px 0;color:rgb(0,0,0)">We appreciate your patience and understanding.</p>
                   <p style="font-size:14px;line-height:10px;margin:16px 0;color:rgb(0,0,0)">Sincerely,</p>
                   <p style="font-size:14px;line-height:10px;margin:16px 0;color:rgb(0,0,0)">The <strong>Seek My Course</strong> Team</p>
