@@ -14,6 +14,13 @@ exports.createUser = async (req, res, next) => {
           message: "User with this email already exists",
         });
       }
+      const existingUserPhone = await User.findOne({ phone });
+      if (existingUserPhone) {
+        res.status(400).json({
+          success: false,
+          message: "User with this Phone already exists",
+        });
+      }
       if (referralCode) {
         const referral = await Referral.findOne({ referralCode });
         if (!referral) {

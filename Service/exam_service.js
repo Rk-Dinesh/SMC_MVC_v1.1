@@ -109,13 +109,13 @@ exports.generateOrFetchExam = async (
 
 exports.updateExamResult = async (courseId, marksString) => {
   try {
-    const result = await ExamSchema.findOneAndUpdate(
+    const result = await Exam.findOneAndUpdate(
       { course: courseId },
       [{ $set: { marks: marksString, passed: true } }],
       { new: true }
     );
 
-    return !!result;
+    return result;
   } catch (error) {
     console.error(error);
     throw error;
@@ -142,6 +142,6 @@ exports.fetchExamResult = async (courseId) => {
     }
   } catch (error) {
     console.error(error);
-    throw error; // Propagate the error to the controller
+    throw error; 
   }
 };
