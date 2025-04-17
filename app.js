@@ -10,9 +10,12 @@ const { setupSocket } = require('./socket');
 
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(cors({
-  origin: [process.env.ORIGIN],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  credentials: true,
+  "Access-Control-Allow-Origin": "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  "Access-Control-Allow-Headers":
+    "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
 }));
 app.use("/uploads/profiles", express.static("uploads/profiles"));
 app.use("/uploads/files", express.static("uploads/files"));
