@@ -55,8 +55,8 @@ exports.finishCourse = async (courseId) => {
   );
 };
 
-exports.getCoursesByUser = async (userId) => {
-  return await Course.find({ user: userId });
+exports.getCoursesByUser  = async (userId) => {
+  return await Course.find({ user: userId }).sort({ date: -1 });
 };
 
 exports.getCoursesByUserCompleted = async (userId) => {
