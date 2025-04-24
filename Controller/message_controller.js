@@ -5,7 +5,7 @@ const {mkdirSync, renameSync} = require("fs");
 
 exports.getMessages = async (req, res, next) => {
   try {
-    const user1 = req.userId;
+    const user1 = req.body.userId;
     const user2 = req.body.id;
     if (!user1 || !user2) {
       return res.status(400).send("Both user IDs are required.");

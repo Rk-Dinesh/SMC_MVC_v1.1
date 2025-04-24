@@ -10,7 +10,7 @@ exports.getAllContacts = async (request, response, next) => {
     );
 
     const contacts = users.map((user) => ({
-      label: `${user.fname} ${user.fname}`,
+      label: `${user.fname} ${user.lname}`,
       value: user._id,
     }));
 
@@ -40,7 +40,7 @@ exports.searchContacts = async (request, response, next) => {
       $and: [
         { _id: { $ne: request.userId } },
         {
-          $or: [{ firstName: regex }, { lastName: regex }, { email: regex }],
+          $or: [{ fname: regex }, { lname: regex }, { email: regex }],
         },
       ],
     });
@@ -53,7 +53,7 @@ exports.searchContacts = async (request, response, next) => {
 
 exports.getContactsForList = async (req, res, next) => {
   try {
-    let { userId } = req;
+    let { userId } = req.query;
     userId = new mongoose.Types.ObjectId(userId);
 
     if (!userId) {
@@ -98,9 +98,8 @@ exports.getContactsForList = async (req, res, next) => {
           lastMessageTime: 1,
           email: "$contactInfo.email",
           firstName: "$contactInfo.fname",
-          lastName: "$contactInfo.fname",
-        //   image: "$contactInfo.image",
-        //   color: "$contactInfo.color",
+          lastName: "$contactInfo.lname",
+          about: "$contactInfo.about",
         },
       },
       {

@@ -1,17 +1,20 @@
+const { default: mongoose } = require("mongoose");
 const Channel = require("../Model/channel_model");
 const User = require("../Model/user_model");
 
 
 exports.createChannel = async (request, response, next) => {
     try {
-      const { name, members } = request.body;
-      const userId = request.userId;
+      const { name, members,userId,desc } = request.body;
+
       const admin = await User.findById(userId);
       if (!admin) {
         return response.status(400).json({ message: "Admin user not found." });
       }
-  
+
       const validMembers = await User.find({ _id: { $in: members } });
+   
+      
       if (validMembers.length !== members.length) {
         return response
           .status(400)
@@ -22,6 +25,8 @@ exports.createChannel = async (request, response, next) => {
         name,
         members,
         admin: userId,
+        creator: `${admin.fname} ${admin.lname}`,
+        desc:desc,  
       });
   
       await newChannel.save();
@@ -35,7 +40,7 @@ exports.createChannel = async (request, response, next) => {
   
   exports.getUserChannels = async (req, res) => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.userId);
+      const userId = new mongoose.Types.ObjectId(req.query.userId);
       const channels = await Channel.find({
         $or: [{ admin: userId }, { members: userId }],
       }).sort({ updatedAt: -1 });

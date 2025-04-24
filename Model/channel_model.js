@@ -4,16 +4,18 @@ const channelSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    desc:{type: String, default: ""},
+    creator: {type:String, default: ""},
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "User",
         required: true,
       },
     ],
     admin: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
       required: true,
     },
     messages: [
