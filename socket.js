@@ -7,7 +7,6 @@ exports.setupSocket = (server) => {
     cors: {
       origin: process.env.ORIGIN,
       methods: ["GET", "POST"],
-      credentials: true,
     },
   });
 

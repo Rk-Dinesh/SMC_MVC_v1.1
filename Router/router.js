@@ -78,6 +78,7 @@ router.post("/api/usersignin", UserController.signInUser);
 router.post("/api/verify", UserController.verifyEmail);   
 router.get("/api/getusers", UserController.getAllUsers);  
 router.get("/api/getusersbyid", UserController.getUserById);  
+router.get("/api/getusersbyidchat", UserController.getUserByIdChat);
 router.delete("/api/deleteuser", UserController.deleteUser);  
 router.post("/api/emailupdate", UserController.updateEmail);  
 router.post("/api/phoneupdate", UserController.updatePhone);  

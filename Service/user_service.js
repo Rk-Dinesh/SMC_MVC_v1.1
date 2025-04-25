@@ -153,6 +153,17 @@ exports.getUserById = async (id) => {
   return user;
 };
 
+exports.getUserByIdchat = async (id) => {
+  const user = await User.findById(id);
+  const course = await Course.find({ user: id });
+
+  const data = {user, course:course.length};
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return data;
+};
+
 exports.deleteUser = async (id) => {
   await Promise.all([
     Course.deleteMany({ user: id }),

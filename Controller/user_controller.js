@@ -114,6 +114,21 @@ exports.getUserById = async (req, res, next) => {
     }
 };
 
+exports.getUserByIdChat = async (req, res, next) => {
+    try {
+        const { id } = req.query;
+
+        const user = await UserService.getUserByIdchat(id);
+
+        res.status(200).json({
+            success: true,
+            user: user,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.deleteUser = async (req, res, next) => {
     try {
         const { id } = req.query;

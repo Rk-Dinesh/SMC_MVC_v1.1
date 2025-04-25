@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   referralLink: { type: String, default: null },
   isPaid: { type: Boolean, default: false },
   totalCourses: { type: Number, default: 1 },
-});
+},{timestamps: true});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

@@ -60,7 +60,7 @@ exports.createChannel = async (request, response, next) => {
         path: "messages",
         populate: {
           path: "sender",
-          select: "firstName lastName email _id image color",
+          select: "fname lname email _id ",
         },
       });
   
