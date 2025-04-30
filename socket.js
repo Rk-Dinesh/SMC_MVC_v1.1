@@ -1,6 +1,7 @@
 const { Server: SocketIOServer } = require("socket.io");
 const Message = require("./Model/message_model");
 const Channel = require("./Model/channel_model");
+const pvsp = require("./Model/pvsp_model");
 
 exports.setupSocket = (server) => {
   const io = new SocketIOServer(server, {
@@ -18,6 +19,17 @@ exports.setupSocket = (server) => {
         const memberSocketId = userSocketMap.get(member.toString());
         if (memberSocketId) {
           io.to(memberSocketId).emit("new-channel-added", channel);
+        }
+      });
+    }
+  };
+
+  const addChatNotify = async (p2p) => {
+    if (p2p && p2p.members) {
+      p2p.members.forEach((member) => {
+        const memberSocketId = userSocketMap.get(member.toString());
+        if (memberSocketId) {
+          io.to(memberSocketId).emit("new-chat-added", p2p);
         }
       });
     }
@@ -43,6 +55,46 @@ exports.setupSocket = (server) => {
     // Optionally, send the message back to the sender (e.g., for message confirmation)
     if (senderSocketId) {
       io.to(senderSocketId).emit("receiveMessage", messageData);
+    }
+  };
+
+  const sendP2PMessage = async (message) => {
+    const { P2PId, sender, content, messageType, fileUrl } = message;
+
+    // Create and save the message
+    const createdMessage = await Message.create({
+      sender,
+      recipient: null, // Channel messages don't have a single recipient
+      content,
+      messageType,
+      timestamp: new Date(),
+      fileUrl,
+    });
+
+    const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id email fname lname ")
+      .exec();
+
+    // Add message to the channel
+    await pvsp.findByIdAndUpdate(P2PId, {
+      $push: { messages: createdMessage._id },
+    });
+
+    // Fetch all members of the channel
+    const channel = await pvsp.findById(P2PId).populate("members");
+
+    const finalData = { ...messageData._doc, P2PId: channel._id };
+    if (channel && channel.members) {
+      channel.members.forEach((member) => {
+        const memberSocketId = userSocketMap.get(member._id.toString());
+        if (memberSocketId) {
+          io.to(memberSocketId).emit("recieve-chat-message", finalData);
+        }
+      });
+      const adminSocketId = userSocketMap.get(channel.admin._id.toString());
+      if (adminSocketId) {
+        io.to(adminSocketId).emit("recieve-chat-message", finalData);
+      }
     }
   };
 
@@ -108,7 +160,11 @@ exports.setupSocket = (server) => {
 
     socket.on("add-channel-notify", addChannelNotify);
 
+    socket.on("add-chat-notify", addChatNotify);
+
     socket.on("sendMessage", sendMessage);
+
+    socket.on("send-pvsp-message", sendP2PMessage);
 
     socket.on("send-channel-message", sendChannelMessage);
 

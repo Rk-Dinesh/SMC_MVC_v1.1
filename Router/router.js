@@ -27,6 +27,7 @@ const SubscriptionController = require("../Controller/subscrption_controller");
 const NotesController = require("../Controller/notes_controller");
 const ExamController = require("../Controller/exam_controller");
 const channelController = require("../Controller/channel_controller");
+const pvspController = require("../Controller/pvsp_controller");
 const messageController = require("../Controller/message_controller");
 const contactsController = require("../Controller/contacts_controller");
 const referralController = require("../Controller/referral_controller");
@@ -191,7 +192,15 @@ router.post("/api/sendexammail", ExamController.sendExamMail);
 //channel rouutes
 router.post("/create-channel", channelController.createChannel);
 router.get("/get-user-channels", channelController.getUserChannels);
+router.get("/get-channel", channelController.getChannel);
 router.get("/get-channel-messages/:channelId", channelController.getChannelMessages);
+router.post("/leave-channel", channelController.leavegroup);
+
+//chat p2p 
+router.post("/create-chat", pvspController.createChat);
+router.get("/get-user-chats", pvspController.getUserChats);
+router.get("/get-chat-messages/:P2PId", pvspController.getChatMessages);
+router.post("/get-chat-id", pvspController.getChatId);  
 
 //message routes
 router.post("/get-messages", messageController.getMessages);  
