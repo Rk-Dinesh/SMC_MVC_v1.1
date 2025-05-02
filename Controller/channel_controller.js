@@ -123,3 +123,22 @@ exports.leavegroup = async (req, res,next) => {
     
   }
 }
+
+exports.addMember = async (req, res, next) => {
+  try {
+    const { channelId, userId } = req.body;
+    const channel = await Channel.findById(channelId);
+    if (!channel) {
+      return res.status(404).json({ message: "Channel not found" });
+    }
+    if (channel.members.includes(userId)) {
+      return res.status(400).json({ message: "User is already a member of this Group" });
+    }
+    channel.members.push(userId);
+    await channel.save();
+    res.status(200).json({ message: "User added to the channel successfully" });  
+  } catch (error) {
+    console.error("Error adding member:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}

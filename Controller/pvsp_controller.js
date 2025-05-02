@@ -118,7 +118,7 @@ exports.getChatId = async (req, res, next) => {
         .status(400)
         .json({ message: "User ID and Contact ID are required." });
     }
-    const chat = await pvsp
+    let chat = await pvsp
       .findOne({
         members: { $all: [userId, contactId] },
       })
@@ -126,9 +126,21 @@ exports.getChatId = async (req, res, next) => {
         path: "members",
         select: "fname lname email _id verifyTokenExpires about",
       });
-    if (!chat) {
-      return res.status(404).json({ message: "Chat not found." });
-    }
+      if (!chat) {
+        chat = new pvsp({
+          members: [userId, contactId], 
+          admin: userId,
+        });
+        await chat.save();
+
+        console.log(chat);
+        
+       
+        await chat.populate({
+          path: "members",
+          select: "fname lname email _id verifyTokenExpires about",
+        });
+      }
 
     const filteredMembers = chat.members.filter(
       (member) => member._id.toString() !== userId.toString()

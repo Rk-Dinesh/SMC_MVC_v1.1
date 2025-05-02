@@ -86,6 +86,8 @@ router.post("/api/phoneupdate", UserController.updatePhone);
 router.post("/api/useruploadcsv", upload.single("file"), UserController.uploadCSV);
 router.post("/api/userprofile", UserController.updateProfile);
 router.post("/api/userbio", UserController.updateBio);
+router.post('/api/blockuser', UserController.PostBlockedUser);
+router.post('/api/unblockuser', UserController.removeBlockedUser);
  // Category 
 router.post("/api/category", categoryController.createCategory); 
 router.put("/api/category/:id", categoryController.updateCategory); 
@@ -195,6 +197,7 @@ router.get("/get-user-channels", channelController.getUserChannels);
 router.get("/get-channel", channelController.getChannel);
 router.get("/get-channel-messages/:channelId", channelController.getChannelMessages);
 router.post("/leave-channel", channelController.leavegroup);
+router.post("/invite-user", channelController.addMember);
 
 //chat p2p 
 router.post("/create-chat", pvspController.createChat);

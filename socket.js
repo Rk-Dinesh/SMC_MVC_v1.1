@@ -2,6 +2,7 @@ const { Server: SocketIOServer } = require("socket.io");
 const Message = require("./Model/message_model");
 const Channel = require("./Model/channel_model");
 const pvsp = require("./Model/pvsp_model");
+const User = require("./Model/user_model");
 
 exports.setupSocket = (server) => {
   const io = new SocketIOServer(server, {
@@ -58,13 +59,23 @@ exports.setupSocket = (server) => {
     }
   };
 
-  const sendP2PMessage = async (message) => {
-    const { P2PId, sender, content, messageType, fileUrl } = message;
+  const sendP2PMessage = async (message,socket) => {
+    const { P2PId, sender,recipient, content, messageType, fileUrl } = message;
+
+    const receiverChat = await User.findById(recipient);
+  
+    if (receiverChat.blockedUsers.includes(sender)) {
+      // Send error back through the socket
+      return socket.emit("chat-error", {
+        status: 403,
+        message: "You are blocked by this user.",
+      });
+    }
 
     // Create and save the message
     const createdMessage = await Message.create({
       sender,
-      recipient: null, // Channel messages don't have a single recipient
+      recipient, 
       content,
       messageType,
       timestamp: new Date(),
@@ -164,7 +175,17 @@ exports.setupSocket = (server) => {
 
     socket.on("sendMessage", sendMessage);
 
-    socket.on("send-pvsp-message", sendP2PMessage);
+   // socket.on("send-pvsp-message", sendP2PMessage);
+    socket.on("send-pvsp-message", async (message) => {
+      try {
+        await sendP2PMessage(message, socket);
+      } catch (error) {
+        socket.emit("chat-error", {
+          status: 403,
+          message: "You are blocked by this user.",
+        });
+      }
+    });
 
     socket.on("send-channel-message", sendChannelMessage);
 
