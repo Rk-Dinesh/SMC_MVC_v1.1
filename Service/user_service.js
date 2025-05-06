@@ -31,7 +31,7 @@ exports.createUser = async (userData) => {
 
   const uniqueIdentifier = generateRandomString(40);
   const referralCodeUser = `seekmycourse/ref/${fname}/${uniqueIdentifier}`;
-  const referralLink = `http://${process.env.ORIGIN}/signup/?ref=${referralCodeUser}`;
+  const referralLink = `${process.env.ORIGIN}/signup/?ref=${referralCodeUser}`;
 
   const token = crypto.randomBytes(20).toString("hex");
   const newUser = new User({
