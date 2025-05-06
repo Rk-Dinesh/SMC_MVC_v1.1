@@ -198,6 +198,7 @@ router.get("/get-channel", channelController.getChannel);
 router.get("/get-channel-messages/:channelId", channelController.getChannelMessages);
 router.post("/leave-channel", channelController.leavegroup);
 router.post("/invite-user", channelController.addMember);
+router.get("/get-Allchannel", channelController.getAllChannels);
 
 //chat p2p 
 router.post("/create-chat", pvspController.createChat);

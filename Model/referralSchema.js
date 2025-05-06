@@ -7,7 +7,13 @@ const referralSchema = new mongoose.Schema({
     referralLink: { type: String, required: true, unique: true },
     referredUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], 
     paidUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    commission: { type: Number, default: 0 }, // Commission earned   
+    commission: { type: Number, default: 0 },
+    commissionDetails : [{
+        amount: { type: Number, default: 0 },
+        date: { type: Date, default: Date.now },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        subscriptionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
+    }] // Commission earned   
 }, { timestamps: true });
 
 const Referral = mongoose.model('Referral', referralSchema);

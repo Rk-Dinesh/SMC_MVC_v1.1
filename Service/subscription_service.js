@@ -140,6 +140,12 @@ exports.createSubscription = async (
     if (referral) {
       referral.paidUsers.push(updatedUser._id);
       referral.commission += 50; 
+      referral.commissionDetails.push({
+        amount: 50,
+        date: new Date(),
+        userId: updatedUser._id,
+        subscriptionId: newSub.subscriberId,
+      });
       await referral.save();
     }
   }

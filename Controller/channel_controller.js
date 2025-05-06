@@ -4,7 +4,9 @@ const User = require("../Model/user_model");
 
 exports.createChannel = async (request, response, next) => {
   try {
-    const { name, members, userId, desc } = request.body;
+    const { name, members, userId, desc,visibility } = request.body;
+    console.log(request.body);
+    
 
     const admin = await User.findById(userId);
     if (!admin) {
@@ -21,10 +23,11 @@ exports.createChannel = async (request, response, next) => {
 
     const newChannel = new Channel({
       name,
+      desc,
       members,
       admin: userId,
       creator: `${admin.fname} ${admin.lname}`,
-      desc: desc,
+      visibility: visibility,
     });
 
     await newChannel.save();
@@ -49,6 +52,20 @@ exports.getUserChannels = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+exports.getAllChannels = async (req, res) => {
+  try {
+    const channels = await Channel.find({visibility:"public"}).sort({ updatedAt: -1 });
+    if (!channels || channels.length === 0) {
+      return res.status(404).json({ message: "No channels found" });
+    }
+    return res.status(200).json({ channels });
+  } catch (error) {
+    console.error("Error getting all channels:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+    
+  }
+}
 
 exports.getChannel = async (req, res) => {
   try {
