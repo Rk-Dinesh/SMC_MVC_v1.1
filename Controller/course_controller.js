@@ -97,12 +97,64 @@ exports.getCourses = async (req, res) => {
   }
 };
 
+exports.getAllCourseLimit = async (req, res, next) => {
+  try {
+    const userId = (req.query.userId);
+      const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+      const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page
+      const searchValue = req.query.search || ""; // Default to empty string if not provided
+
+      
+      // Fetch data from the service
+      const { course, totalCount } = await CourseService.getAllCourseLimit(userId,page, limit, searchValue);
+      // Send the response
+      res.status(200).json({
+          status: true,
+          message: "Course retrieved successfully",
+          data: course,
+          metadata: {
+              currentPage: page,
+              totalPages: Math.ceil(totalCount / limit),
+              totalItems: totalCount,
+          },
+      });
+  } catch (error) {
+      next(error);
+  }
+};
+
 exports.getCoursesCompleted = async (req, res) => {
   try {
     const courses = await CourseService.getCoursesByUserCompleted(req.query.userId);
     res.json(courses);
   } catch (error) {
     res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.getAllCompletedCourseLimit = async (req, res, next) => {
+  try {
+    const userId = (req.query.userId);
+      const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+      const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page
+      const searchValue = req.query.search || ""; // Default to empty string if not provided
+
+      
+      // Fetch data from the service
+      const { course, totalCount } = await CourseService.getCoursesByUserCompletedLimit(userId,page, limit, searchValue);
+      // Send the response
+      res.status(200).json({
+          status: true,
+          message: "CompletedCourse retrieved successfully",
+          data: course,
+          metadata: {
+              currentPage: page,
+              totalPages: Math.ceil(totalCount / limit),
+              totalItems: totalCount,
+          },
+      });
+  } catch (error) {
+      next(error);
   }
 };
 

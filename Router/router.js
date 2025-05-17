@@ -147,7 +147,9 @@ router.post("/api/courseshared", courseController.sharedCourse);
 router.post("/api/update", courseController.updateCourse); 
 router.post("/api/finish", courseController.finishCourse); 
 router.get("/api/courses", courseController.getCourses);
+router.get('/api/courseslimit',courseController.getAllCourseLimit);
 router.get("/api/completedcourses", courseController.getCoursesCompleted); 
+router.get("/api/completedcourseslimit", courseController.getAllCompletedCourseLimit); 
 router.get("/api/getcourses", courseController.getAllCourses); 
 router.delete("/api/deletecourse/:id", courseController.deleteCourse); 
 // Policies 

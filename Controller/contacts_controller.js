@@ -6,12 +6,13 @@ exports.getAllContacts = async (request, response, next) => {
   try {
     const users = await User.find(
       { _id: { $ne: request.userId } },
-      "fname lname _id"
+      "fname lname _id email"
     );
 
     const contacts = users.map((user) => ({
       label: `${user.fname} ${user.lname}`,
       value: user._id,
+      email: user.email,
     }));
 
     return response.status(200).json({ contacts });

@@ -59,8 +59,60 @@ exports.getCoursesByUser  = async (userId) => {
   return await Course.find({ user: userId }).sort({ date: -1 });
 };
 
+exports.getAllCourseLimit = async (userId, page, limit, searchValue) => {
+  const skip = (page - 1) * limit;
+
+  const query = {
+    user: userId, // Filter by userId
+    ...(searchValue && {
+      $or: [
+        { mainTopic: { $regex: searchValue, $options: "i" } },
+      ],
+    }),
+  };
+
+  // Fetch paginated data
+  const course = await Course.find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ date: -1 });
+    
+      
+
+  // Fetch total count of matching documents for pagination metadata
+  const totalCount = await Course.countDocuments(query);
+
+  return { course, totalCount };
+};
+
+
 exports.getCoursesByUserCompleted = async (userId) => {
   return await Course.find({ user: userId,completed:true });
+};
+
+exports.getCoursesByUserCompletedLimit = async (userId, page, limit, searchValue) => {
+  const skip = (page - 1) * limit;
+
+  const query = {
+    user: userId,
+    completed:true,
+    ...(searchValue && {
+      $or: [
+        { mainTopic: { $regex: searchValue, $options: "i" } },
+      ],
+    }),
+  };
+
+  // Fetch paginated data
+  const course = await Course.find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ date: -1 });
+
+  // Fetch total count of matching documents for pagination metadata
+  const totalCount = await Course.countDocuments(query);
+
+  return { course, totalCount };
 };
 
 exports.getAllCourses = async () => {
