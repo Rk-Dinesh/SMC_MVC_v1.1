@@ -280,6 +280,34 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+exports.updateBillingInfo = async (req, res) => {
+  const { user, addressline1, addressline2, city,state, country,zipcode  } =
+    req.body;
+
+  try {
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+    const updatedUserProfile = await UserService.updateBio(user, {
+      addressline1,
+      addressline2,
+      city,
+      state,
+      country,
+      zipcode
+    });
+    res.json({
+      success: true,
+      message: "User BillingInfo updated successfully",
+      data: updatedUserProfile,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 exports.PostBlockedUser = async (req, res) => {
   const { userId, blockUserId } = req.body;
 

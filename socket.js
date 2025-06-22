@@ -3,6 +3,7 @@ const Message = require("./Model/message_model");
 const Channel = require("./Model/channel_model");
 const pvsp = require("./Model/pvsp_model");
 const User = require("./Model/user_model");
+const Notify = require("./Model/notification_model");
 
 exports.setupSocket = (server) => {
   const io = new SocketIOServer(server, {
@@ -111,7 +112,7 @@ exports.setupSocket = (server) => {
 
   const sendChannelMessage = async (message) => {
     const { channelId, sender, content, messageType, fileUrl } = message;
-
+  
     // Create and save the message
     const createdMessage = await Message.create({
       sender,
@@ -121,33 +122,43 @@ exports.setupSocket = (server) => {
       timestamp: new Date(),
       fileUrl,
     });
-
+  
     const messageData = await Message.findById(createdMessage._id)
       .populate("sender", "id email fname lname ")
       .exec();
-
+  
     // Add message to the channel
     await Channel.findByIdAndUpdate(channelId, {
       $push: { messages: createdMessage._id },
     });
-
+  
     // Fetch all members of the channel
     const channel = await Channel.findById(channelId).populate("members");
-
+  
     const finalData = { ...messageData._doc, channelId: channel._id };
     if (channel && channel.members) {
-      channel.members.forEach((member) => {
+      // Use for...of loop to properly await inside loop
+      for (const member of channel.members) {
         const memberSocketId = userSocketMap.get(member._id.toString());
         if (memberSocketId) {
           io.to(memberSocketId).emit("recieve-channel-message", finalData);
         }
-      });
-      const adminSocketId = userSocketMap.get(channel.admin._id.toString());
-      if (adminSocketId) {
-        io.to(adminSocketId).emit("recieve-channel-message", finalData);
+  
+        // Create and save notification for each member
+        const notifyMail = new Notify({
+          user: member._id,
+          subject: `New Message in Channel`,
+          description: `You have a new message in the Group ${channel.name}.`,
+          read:"no"
+        });
+  
+        await notifyMail.save();
       }
+  
     }
   };
+  
+  
 
   const disconnect = (socket) => {
     console.log("Client disconnected", socket.id);

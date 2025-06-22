@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Category = require("./category_model");
 
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
@@ -8,6 +9,12 @@ const userSchema = new mongoose.Schema({
   dob: String,
   password: String,
   type: String,
+  addressline1:{type:String,default:""},
+  addressline2:{type:String, default:""},
+  city:{type:String, default:""},
+  state:{type:String, default:""},
+  country:{type:String, default:""},
+  zipcode:{type:String, default:""},
   about: { type: String, default: "" },
   facebook:{ type: String, default: "" },
   twitter:{ type: String, default: "" },
@@ -33,3 +40,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
+

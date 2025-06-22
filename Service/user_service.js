@@ -18,8 +18,7 @@ const { generateRandomString } = require("../utils");
 
 exports.createUser = async (userData) => {
   const { email, fname, lname, phone, dob, type, referralCode } = userData;
-
-  // Handle referral logic
+  // Handle referral logic 
   let referrerId = null;
   let referrerName = null;
 
@@ -72,6 +71,7 @@ exports.createUser = async (userData) => {
     user: newUser._id,
     subject: `Welcome message`,
     description: `Welcome to Pick My Course! Start creating your personalized learning journey today.`,
+    read:"no"
   });
 
   await notifyMail.save();

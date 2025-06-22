@@ -32,6 +32,8 @@ const messageController = require("../Controller/message_controller");
 const contactsController = require("../Controller/contacts_controller");
 const referralController = require("../Controller/referral_controller");
 const bankDetailsController = require("../Controller/acc_details_controller");
+const categorycourseController = require("../Controller/categoryCourse_controller");
+const preCourseController = require("../Controller/preGenCourse_controller")
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -86,6 +88,7 @@ router.post("/api/phoneupdate", UserController.updatePhone);
 router.post("/api/useruploadcsv", upload.single("file"), UserController.uploadCSV);
 router.post("/api/userprofile", UserController.updateProfile);
 router.post("/api/userbio", UserController.updateBio);
+router.post('/api/billinginfo',UserController.updateBillingInfo);
 router.post('/api/blockuser', UserController.PostBlockedUser);
 router.post('/api/unblockuser', UserController.removeBlockedUser);
  // Category 
@@ -93,6 +96,12 @@ router.post("/api/category", categoryController.createCategory);
 router.put("/api/category/:id", categoryController.updateCategory); 
 router.delete("/api/category/:id", categoryController.deleteCategory); 
 router.get("/api/getcategory", categoryController.getCategories); 
+//CategoryCourse
+router.post("/api/categorycourse", categorycourseController.createCategoryCourse); 
+router.post("/api/addsubcategories/:id",categorycourseController.addSubCategories)
+router.put("/api/categorycourse/:id", categorycourseController.updateCategoryCourse); 
+router.delete("/api/categorycourse/:id", categorycourseController.deleteCategoryCourse); 
+router.get("/api/getcategorycourse", categorycourseController.getCategoriesCourse); 
 // notify
 router.post("/api/notify", notifyController.createNotification); 
 router.get("/api/getnotify", notifyController.getAllNotifications); 
@@ -152,6 +161,18 @@ router.get("/api/completedcourses", courseController.getCoursesCompleted);
 router.get("/api/completedcourseslimit", courseController.getAllCompletedCourseLimit); 
 router.get("/api/getcourses", courseController.getAllCourses); 
 router.delete("/api/deletecourse/:id", courseController.deleteCourse); 
+
+//preCourse
+
+router.post("/api/precourse", preCourseController.precreateCourse);
+router.post("/api/addprecourse", preCourseController.addUserToCourse);  
+router.post("/api/preupdate", preCourseController.updatePreCourse); 
+router.post("/api/prefinish", preCourseController.finishPreCourse); 
+router.get("/api/preallcourses", preCourseController.getAllPreCourses);
+router.get('/api/precourseslimit',preCourseController.getAllPreCourseLimit);
+router.delete("/api/deleteprecourse/:id", preCourseController.deletePreCourse); 
+router.get("/api/getprecroueseId/:id",preCourseController.getCourseWithUsers);
+
 // Policies 
 router.post("/api/policies", policyController.updatePolicy); 
 router.get("/api/policies", policyController.getPolicy); 
@@ -175,24 +196,20 @@ router.post("/razorpaycancel", PaymentController.cancelSubscription);
 router.post("/api/stripepayment", PaymentController.createStripeSession);
 router.post("/api/stripedetails", PaymentController.getStripeDetails);
 router.post("/api/stripecancel", PaymentController.cancelStripeSubscription);
-
 // subscritpion
 router.post("/api/subscriptiondetail", SubscriptionController.getSubscriptionDetails);
 router.post("/api/usersubscription", SubscriptionController.createUserSubscription);
 router.get("/api/getallsubs", SubscriptionController.getAllSubscriptions);
 router.get("/api/getsubsbyid", SubscriptionController.getSubscriptionsByUserId);
 router.get("/api/getsubonid/:id", SubscriptionController.getSubscriptionById);
-
 //notes
 router.post("/api/savenotes", NotesController.saveNotes);
 router.post("/api/getnotes", NotesController.getNotes);
-
 //exam
 router.post("/api/aiexam", ExamController.generateAIExam);
 router.post("/api/updateresult", ExamController.updateResult);
 router.get("/api/getmyresult", ExamController.getMyResult);
 router.post("/api/sendexammail", ExamController.sendExamMail);
-
 //channel rouutes
 router.post("/create-channel", channelController.createChannel);
 router.get("/get-user-channels", channelController.getUserChannels);
@@ -201,29 +218,24 @@ router.get("/get-channel-messages/:channelId", channelController.getChannelMessa
 router.post("/leave-channel", channelController.leavegroup);
 router.post("/invite-user", channelController.addMember);
 router.get("/get-Allchannel", channelController.getAllChannels);
-
 //chat p2p 
 router.post("/create-chat", pvspController.createChat);
 router.get("/get-user-chats", pvspController.getUserChats);
 router.get("/get-chat-messages/:P2PId", pvspController.getChatMessages);
 router.post("/get-chat-id", pvspController.getChatId);  
-
 //message routes
 router.post("/get-messages", messageController.getMessages);  
 router.post("/upload-file", uploadMessage.single("file"), messageController.uploadFile);
-
 //contacts routes
 router.get("/all-contacts", contactsController.getAllContacts);
 router.post("/search", contactsController.searchContacts);
 router.get("/get-contacts-for-list", contactsController.getContactsForList);
-
 //referral
 router.post('/admin/create-referral', referralController.createReferral);
 router.get('/api/referral', referralController.getReferralDetails);
 router.get('/api/referralbyid', referralController.getReferralDetailsbyId);
 router.get('/api/referral-all', referralController.getReferralAllDetails);
 router.delete('/api/referral/:id', referralController.deleteReferral);
-
 //bankdetails
 router.post("/api/bankdetails", bankDetailsController.postBankDetails);
 router.get("/api/getbankdetails", bankDetailsController.getAllAccountDetails);

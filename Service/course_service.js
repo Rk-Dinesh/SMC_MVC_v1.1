@@ -91,7 +91,7 @@ exports.getCoursesByUserCompleted = async (userId) => {
 };
 
 exports.getCoursesByUserCompletedLimit = async (userId, page, limit, searchValue) => {
-  const skip = (page - 1) * limit;
+  const skip = (page - 1) * limit; //20
 
   const query = {
     user: userId,
