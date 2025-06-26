@@ -19,6 +19,8 @@ exports.generateAIExam = async (req, res) => {
   }
 };
 
+
+
 exports.updateResult = async (req, res) => {
   const { courseId, marksString } = req.body;
 

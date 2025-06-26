@@ -6,17 +6,41 @@ const Language = require("../Model/lang_model");
 const unsplash = createApi({ accessKey: process.env.UNSPLASH_ACCESS_KEY });
 
 exports.createCourse = async (courseData) => {
-  const { user, fname, lname, email, phone, content, type, mainTopic,lang } = courseData;
-  // const result = await unsplash.search.getPhotos({
-  //   query: mainTopic,
-  //   page: 1,
-  //   perPage: 1,
-  //   orientation: "landscape",
-  // });
-  // const photos = result.response.results; 
-  // const photo = photos[0].urls.regular;
-  const photo = "https://images.unsplash.com/photo-1635477906625-ef1aea584e17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxrb2VuaWdzZWdnJTIwYWdlcmElMjByfGVufDB8MHx8fDE3MzI2ODgwODd8MA&ixlib=rb-4.0.3&q=80&w=1080"
-  const newCourse = new Course({ user,fname, lname, email, phone, content, type, mainTopic,lang, photo });  
+  const { user, fname, lname, email, phone, content, type, mainTopic, lang } =
+    courseData;
+  let photo;
+  try {
+    const result = await unsplash.search.getPhotos({
+      query: mainTopic,
+      page: 1,
+      perPage: 1,
+      orientation: "landscape",
+    });
+
+    const photos = result.response.results;
+    if (photos.length > 0) {
+      photo = photos[0].urls.regular;
+    } else {
+      photo =
+        "https://images.unsplash.com/photo-1659079631665-eb95370fb173?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxqYXZhc2NyaXB0fGVufDB8MHx8fDE3MzY3NDU1ODR8MA&ixlib=rb-4.0.3&q=80&w=1080";
+    }
+  } catch (error) {
+    // console.error("Error fetching photo from Unsplash:", error);
+    photo =
+      "https://images.unsplash.com/photo-1659079631665-eb95370fb173?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxqYXZhc2NyaXB0fGVufDB8MHx8fDE3MzY3NDU1ODR8MA&ixlib=rb-4.0.3&q=80&w=1080";
+  }
+  const newCourse = new Course({
+    user,
+    fname,
+    lname,
+    email,
+    phone,
+    content,
+    type,
+    mainTopic,
+    lang,
+    photo,
+  });
   const newLang = new Language({ course: newCourse._id, lang: lang });
   await newLang.save();
   return await newCourse.save();
@@ -36,15 +60,12 @@ exports.shareCourse = async (courseData) => {
 };
 
 exports.updateCourse = async (courseId, content) => {
-
   const course = await Course.findOneAndUpdate(
     { _id: courseId },
     { $set: { content } },
     { new: true }
   );
   return course;
-  
-  
 };
 
 exports.finishCourse = async (courseId) => {
@@ -55,7 +76,7 @@ exports.finishCourse = async (courseId) => {
   );
 };
 
-exports.getCoursesByUser  = async (userId) => {
+exports.getCoursesByUser = async (userId) => {
   return await Course.find({ user: userId }).sort({ date: -1 });
 };
 
@@ -65,19 +86,15 @@ exports.getAllCourseLimit = async (userId, page, limit, searchValue) => {
   const query = {
     user: userId, // Filter by userId
     ...(searchValue && {
-      $or: [
-        { mainTopic: { $regex: searchValue, $options: "i" } },
-      ],
+      $or: [{ mainTopic: { $regex: searchValue, $options: "i" } }],
     }),
   };
 
   // Fetch paginated data
   const course = await Course.find(query)
-      .skip(skip)
-      .limit(limit)
-      .sort({ date: -1 });
-    
-      
+    .skip(skip)
+    .limit(limit)
+    .sort({ date: -1 });
 
   // Fetch total count of matching documents for pagination metadata
   const totalCount = await Course.countDocuments(query);
@@ -85,29 +102,31 @@ exports.getAllCourseLimit = async (userId, page, limit, searchValue) => {
   return { course, totalCount };
 };
 
-
 exports.getCoursesByUserCompleted = async (userId) => {
-  return await Course.find({ user: userId,completed:true });
+  return await Course.find({ user: userId, completed: true });
 };
 
-exports.getCoursesByUserCompletedLimit = async (userId, page, limit, searchValue) => {
+exports.getCoursesByUserCompletedLimit = async (
+  userId,
+  page,
+  limit,
+  searchValue
+) => {
   const skip = (page - 1) * limit; //20
 
   const query = {
     user: userId,
-    completed:true,
+    completed: true,
     ...(searchValue && {
-      $or: [
-        { mainTopic: { $regex: searchValue, $options: "i" } },
-      ],
+      $or: [{ mainTopic: { $regex: searchValue, $options: "i" } }],
     }),
   };
 
   // Fetch paginated data
   const course = await Course.find(query)
-      .skip(skip)
-      .limit(limit)
-      .sort({ date: -1 });
+    .skip(skip)
+    .limit(limit)
+    .sort({ date: -1 });
 
   // Fetch total count of matching documents for pagination metadata
   const totalCount = await Course.countDocuments(query);
@@ -123,7 +142,7 @@ exports.deleteCourse = async (id) => {
   return await Course.findByIdAndDelete(id);
 };
 
-exports.sendCourseMail = async ( fname, lname,email, mainTopic) => {  
+exports.sendCourseMail = async (fname, lname, email, mainTopic) => {
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,

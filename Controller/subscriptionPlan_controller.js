@@ -13,7 +13,7 @@ exports.createSubscriptionPlan = async (req, res) => {
       tax,
       subtopic,
       coursetype,
-      stripeId,
+      paymentId,
       duration,
       preCourses,
       quizAccess,
@@ -30,7 +30,7 @@ exports.createSubscriptionPlan = async (req, res) => {
         tax,
         subtopic,
         coursetype,
-        stripeId,
+        paymentId,
         duration,
         preCourses,
         quizAccess,
@@ -120,7 +120,7 @@ exports.updateSubscriptionPlan = async (req, res) => {
     tax,
     subtopic,
     coursetype,
-    stripeId,
+    paymentId,
     duration,
     preCourses,
     quizAccess,
@@ -151,7 +151,7 @@ exports.updateSubscriptionPlan = async (req, res) => {
         tax,
         subtopic,
         coursetype,
-        stripeId,
+        paymentId,
         duration,
         preCourses,
         quizAccess,
@@ -217,11 +217,38 @@ exports.getAllSubscriptionPlan = async (req, res) => {
   }
 };
 
+exports.getAllSubscriptionPlanPackage = async (req, res) => {
+  try {
+    const plans = await SubscriptionPlanService.getAllSubscriptionPlanPackages();
+    res.status(200).json({ success: true, data: plans });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 exports.getSubscriptionPlan = async (req, res) => {
   try {
     const { id } = req.params;
     const plan = await SubscriptionPlanService.getSubscriptionPlan(id);
     res.status(200).json({ success: true, plan: plan });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+exports.getSubscriptionPlanByPackageName = async (req, res) => {
+  try {
+    const { packagename } = req.query;
+    const plan = await SubscriptionPlanService.getSubscriptionPlanByPackageName(
+      packagename
+    );
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: "Subscription plan not found",
+      });
+    }
+    res.status(200).json({ success: true, data: plan });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }

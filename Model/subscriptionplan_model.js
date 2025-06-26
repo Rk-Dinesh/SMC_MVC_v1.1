@@ -9,27 +9,22 @@ const subscriptionPlanSchema = new mongoose.Schema(
     tax: Number,
     subtopic: String,
     coursetype: String,
-    stripeId: String,
+    paymentId: String,
     duration: String,
     preCourses: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["Yes", "No"],
     },
     quizAccess: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["Yes", "No"],
     },
     studyGroupAccess: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["Yes", "No"],
     },
     date: { type: Date, default: Date.now },
     active: { type: Boolean, default: true },
-    // createdBy: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Admin",
-    //   required: true,
-    // },
   },
   { timestamps: true }
 );

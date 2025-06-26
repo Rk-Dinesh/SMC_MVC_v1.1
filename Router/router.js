@@ -33,7 +33,9 @@ const contactsController = require("../Controller/contacts_controller");
 const referralController = require("../Controller/referral_controller");
 const bankDetailsController = require("../Controller/acc_details_controller");
 const categorycourseController = require("../Controller/categoryCourse_controller");
-const preCourseController = require("../Controller/preGenCourse_controller")
+const preCourseController = require("../Controller/preGenCourse_controller");
+const QuizController = require("../Controller/quiz_controller");
+const DashboardController = require("../Controller/dashboardAPI");
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -135,7 +137,9 @@ router.post("/api/addusertoplan", subscriptionplanController.createAddUserPlan);
 router.put("/api/subscriptionplan/:id", subscriptionplanController.updateSubscriptionPlan);   
 router.delete("/api/subscriptionplan/:id", subscriptionplanController.deleteSubscriptionPlan); 
 router.get("/api/getsubscriptionplan", subscriptionplanController.getAllSubscriptionPlan); 
-router.get("/api/getsubscriptionplanbyid/:id", subscriptionplanController.getSubscriptionPlan); 
+router.get("/api/getsubscriptionplanpackages", subscriptionplanController.getAllSubscriptionPlanPackage);
+router.get("/api/getsubscriptionplanbyid/:id", subscriptionplanController.getSubscriptionPlan);
+router.get("/api/getsubscriptionplanbypackagename", subscriptionplanController.getSubscriptionPlanByPackageName); 
 //Faq
 router.post("/api/faq", faqController.createFaq); 
 router.delete("/api/deletefaq/:id", faqController.deleteFaq); 
@@ -171,7 +175,8 @@ router.post("/api/prefinish", preCourseController.finishPreCourse);
 router.get("/api/preallcourses", preCourseController.getAllPreCourses);
 router.get('/api/precourseslimit',preCourseController.getAllPreCourseLimit);
 router.delete("/api/deleteprecourse/:id", preCourseController.deletePreCourse); 
-router.get("/api/getprecroueseId/:id",preCourseController.getCourseWithUsers);
+router.get("/api/getprecourseId",preCourseController.getCourseWithUsers);
+router.post("/api/updateMarks", preCourseController.updateMarks);
 
 // Policies 
 router.post("/api/policies", policyController.updatePolicy); 
@@ -202,6 +207,7 @@ router.post("/api/usersubscription", SubscriptionController.createUserSubscripti
 router.get("/api/getallsubs", SubscriptionController.getAllSubscriptions);
 router.get("/api/getsubsbyid", SubscriptionController.getSubscriptionsByUserId);
 router.get("/api/getsubonid/:id", SubscriptionController.getSubscriptionById);
+
 //notes
 router.post("/api/savenotes", NotesController.saveNotes);
 router.post("/api/getnotes", NotesController.getNotes);
@@ -241,4 +247,10 @@ router.post("/api/bankdetails", bankDetailsController.postBankDetails);
 router.get("/api/getbankdetails", bankDetailsController.getAllAccountDetails);
 router.get("/api/getbankdetailsbyuser", bankDetailsController.getAccountDetailsByUser);
 
+//Quiz
+router.post("/api/generatequiz", QuizController.generateAIQuiz);
+router.get("/api/getallquiz", QuizController.getAllQuizzes);
+router.get("/api/quizbyid", QuizController.getQuizById);
+
+router.get("/api/aggregate", DashboardController.aggregateData);
 module.exports = router;

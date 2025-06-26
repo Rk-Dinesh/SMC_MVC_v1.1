@@ -119,7 +119,7 @@ exports.getAllPreCourseLimit = async (req, res, next) => {
 
 exports.getCourseWithUsers = async (req, res) => {
   try {
-    const { courseId } = req.params;
+    const { courseId } = req.query;
     
     if (!courseId) {
       return res.status(400).json({
@@ -146,3 +146,20 @@ exports.getCourseWithUsers = async (req, res) => {
      });
   }
 };
+
+exports.updateMarks = async (req, res) => {
+  const { courseId, marksString,userId } = req.body;
+
+  try {
+    const success = await preGenerateCourse.updateMarks(courseId, marksString,userId);
+
+    if (success) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+}

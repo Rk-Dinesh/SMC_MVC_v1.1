@@ -14,16 +14,27 @@ exports.precreateCourse = async (courseData) => {
     subCategory1,
     subCategory2,
   } = courseData;
-  // const result = await unsplash.search.getPhotos({
-  //   query: mainTopic,
-  //   page: 1,
-  //   perPage: 1,
-  //   orientation: "landscape",
-  // });
-  // const photos = result.response.results;
-  // const photo = photos[0].urls.regular;
-  const photo =
-    "https://images.unsplash.com/photo-1635477906625-ef1aea584e17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxrb2VuaWdzZWdnJTIwYWdlcmElMjByfGVufDB8MHx8fDE3MzI2ODgwODd8MA&ixlib=rb-4.0.3&q=80&w=1080";
+  let photo;
+  try {
+    const result = await unsplash.search.getPhotos({
+      query: mainTopic,
+      page: 1,
+      perPage: 1,
+      orientation: "landscape",
+    });
+
+    const photos = result.response.results;
+    if (photos.length > 0) {
+      photo = photos[0].urls.regular;
+    } else {
+      photo =
+        "https://images.unsplash.com/photo-1659079631665-eb95370fb173?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxqYXZhc2NyaXB0fGVufDB8MHx8fDE3MzY3NDU1ODR8MA&ixlib=rb-4.0.3&q=80&w=1080";
+    }
+  } catch (error) {
+    // console.error("Error fetching photo from Unsplash:", error);
+    photo =
+      "https://images.unsplash.com/photo-1659079631665-eb95370fb173?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxqYXZhc2NyaXB0fGVufDB8MHx8fDE3MzY3NDU1ODR8MA&ixlib=rb-4.0.3&q=80&w=1080";
+  }
   const newCourse = new PreCourse({
     content,
     type,
@@ -51,7 +62,7 @@ exports.addUserToPreCourse = async (courseId, userId) => {
   );
 
   if (!userExists) {
-   // console.log("User  does not exist, adding user:", userId);
+    // console.log("User  does not exist, adding user:", userId);
     course.user.push({
       userId: userId,
       completed: false,
@@ -60,7 +71,7 @@ exports.addUserToPreCourse = async (courseId, userId) => {
 
     try {
       await course.save();
-    //  console.log("User  added successfully:", course.user);
+      //  console.log("User  added successfully:", course.user);
     } catch (error) {
       console.error("Error saving course:", error);
     }
@@ -70,7 +81,6 @@ exports.addUserToPreCourse = async (courseId, userId) => {
 
   return course;
 };
-
 
 exports.updatePreCourse = async (courseId, content) => {
   const precourse = await PreCourse.findOneAndUpdate(
@@ -113,7 +123,14 @@ exports.deletePreCourse = async (id) => {
   return await PreCourse.findByIdAndDelete(id);
 };
 
-exports.getAllPreCourseLimit = async (page, limit, searchValue,category,subcategory1,subcategory2) => {
+exports.getAllPreCourseLimit = async (
+  page,
+  limit,
+  searchValue,
+  category,
+  subcategory1,
+  subcategory2
+) => {
   const skip = (page - 1) * limit;
 
   const query = {
@@ -139,15 +156,36 @@ exports.getAllPreCourseLimit = async (page, limit, searchValue,category,subcateg
 
 exports.getCourseById = async (courseId) => {
   try {
-    return await PreCourse.findById(courseId).populate({
-      path: "user.userId",
-      select: "id fname lname email phone type", 
-    }).select('+user.completed +user.startDate +user.endDate');;
+    return await PreCourse.findById(courseId)
+      .populate({
+        path: "user.userId",
+        select: "id fname lname email phone type",
+      })
+      .select("+user.completed +user.startDate +user.endDate +user.quizMarks +user.quizPassed");
   } catch (error) {
     throw error;
   }
 };
 
+exports.updateMarks = async (courseId, marksString, userId) => {
+  try {
+    return await PreCourse.findOneAndUpdate(
+      {
+        _id: courseId,
+        "user.userId": userId,
+      },
+      {
+        $set: {
+          "user.$.quizMarks": marksString,
+          "user.$.quizPassed": true,
+        },
+      },
+      { new: true }
+    );
+  } catch (error) {
+    throw error;
+  }
+};
 
 // async getCourseById(courseId) {
 //   try {
@@ -156,7 +194,7 @@ exports.getCourseById = async (courseId) => {
 //         path: 'user.userId',
 //         select: 'id fname lname email phone type'
 //       });
-    
+
 //     // Manually include the user sub-document fields
 //     return {
 //       ...course.toObject(),
@@ -193,4 +231,3 @@ exports.getCourseById = async (courseId) => {
 //   "createdAt": "2023-10-01T00:00:00.000Z",
 //   "updatedAt": "2023-10-15T00:00:00.000Z"
 // }
-

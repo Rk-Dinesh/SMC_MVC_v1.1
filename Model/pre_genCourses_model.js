@@ -13,10 +13,12 @@ const preGenCourseSchema = new mongoose.Schema(
     subCategory2 : String,
     user: [
       {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User ' },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         completed: { type: Boolean, default: false },
         startDate: { type: Date, default: Date.now },
-        endDate : { type: Date, default: Date.now },
+        endDate : { type: Date, default: '' },
+        quizMarks: { type: String, default: "" },
+        quizPassed: { type: Boolean, default: false },
       }
     ]
   },

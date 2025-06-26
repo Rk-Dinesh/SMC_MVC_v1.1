@@ -25,6 +25,16 @@ exports.getAllSubscriptionPlan = async () => {
   return await SubscriptionPlan.find();
 }; 
 
+exports.getAllSubscriptionPlanPackages = async () => {
+  return await SubscriptionPlan.find().select("packagename ");
+}; 
+
 exports.getSubscriptionPlan = async (id) => {
   return await SubscriptionPlan.findById(id);
+};
+
+exports.getSubscriptionPlanByPackageName = async (packagename) => {
+  return await SubscriptionPlan.findOne({ packagename }).select(
+    "packagename  preCourses quizAccess studyGroupAccess "
+  );
 };
