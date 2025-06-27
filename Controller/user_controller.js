@@ -253,6 +253,57 @@ exports.updateBio = async (req, res) => {
   }
 };
 
+exports.updateAbout = async (req, res) => {
+  const { user, about } = req.body;
+
+  try {
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+    const updatedUserBio = await UserService.updateBio(user, {
+      about,
+      facebook,
+      twitter,
+      instagram,
+      linkedIn,
+    });
+    res.json({
+      success: true,
+      message: "User About updated successfully",
+      data: updatedUserBio,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+exports.updateSocialmedia = async (req, res) => {
+  const { user, facebook, twitter, instagram, linkedIn } = req.body;
+
+  try {
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+    const updatedUserBio = await UserService.updateBio(user, {
+      facebook,
+      twitter,
+      instagram,
+      linkedIn,
+    });
+    res.json({
+      success: true,
+      message: "User Media updated successfully",
+      data: updatedUserBio,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 exports.updateProfile = async (req, res) => {
   const { user, goals, resource, experience, skills, areaOfInterest } =
     req.body;

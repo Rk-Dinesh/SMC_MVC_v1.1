@@ -90,6 +90,8 @@ router.post("/api/phoneupdate", UserController.updatePhone);
 router.post("/api/useruploadcsv", upload.single("file"), UserController.uploadCSV);
 router.post("/api/userprofile", UserController.updateProfile);
 router.post("/api/userbio", UserController.updateBio);
+router.post("/api/usersocialmedia", UserController.updateSocialmedia);
+router.post("/api/userabout", UserController.updateAbout);
 router.post('/api/billinginfo',UserController.updateBillingInfo);
 router.post('/api/blockuser', UserController.PostBlockedUser);
 router.post('/api/unblockuser', UserController.removeBlockedUser);
