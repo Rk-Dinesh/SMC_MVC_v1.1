@@ -111,10 +111,15 @@ exports.generateTheory = async (req, res) => {
 exports.fetchImage = async (req, res, next) => {
   const receivedData = req.body;
   const promptString = receivedData.prompt;
+  console.log("Received prompt:", promptString);
+  
   gis(promptString, logResults);
   function logResults(error, results) {
     if (error) {
       //ERROR
+      console.error("Error fetching images:", error);
+      res.status(500).json({ success: false, message: error.message });
+    } else if (results.length === 0) {
     } else {
       res.status(200).json({ url: results[0].url });
     }
