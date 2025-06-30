@@ -358,3 +358,36 @@ exports.getBasedOnSubCategory1 = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.deleteSubCategory2 = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+    
+        // Validate ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid subCategory2 ID",
+        });
+        }
+    
+        const subCategory2Id = new mongoose.Types.ObjectId(id);
+    
+        const deletedSubCategory = await SubCategory2.findByIdAndDelete(subCategory2Id);
+    
+        if (!deletedSubCategory) {
+        return res.status(404).json({
+            success: false,
+            message: "SubCategory2 not found",
+        });
+        }
+    
+        res.status(200).json({
+        success: true,
+        message: "SubCategory2 deleted successfully",
+        data: deletedSubCategory,
+        });
+    } catch (error) {
+        next(error);
+    }
+}

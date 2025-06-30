@@ -109,6 +109,7 @@ router.get("/api/getAllCategoriesTablePageLimit", categorycourseController.getCa
 router.get("/api/getonlyCategory", categorycourseController.getOnlyCategory);
 router.get("/api/getbasedOnCategory", categorycourseController.getBasedOnCategory);
 router.get("/api/getbasedOnSubategory1", categorycourseController.getBasedOnSubCategory1);
+router.delete("/api/deletesubcategory1course/:id", categorycourseController.deleteSubCategory2);
  
 // notify
 router.post("/api/notify", notifyController.createNotification); 
