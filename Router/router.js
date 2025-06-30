@@ -102,10 +102,14 @@ router.delete("/api/category/:id", categoryController.deleteCategory);
 router.get("/api/getcategory", categoryController.getCategories); 
 //CategoryCourse
 router.post("/api/categorycourse", categorycourseController.createCategoryCourse); 
-router.post("/api/addsubcategories/:id",categorycourseController.addSubCategories)
-router.put("/api/categorycourse/:id", categorycourseController.updateCategoryCourse); 
-router.delete("/api/categorycourse/:id", categorycourseController.deleteCategoryCourse); 
-router.get("/api/getcategorycourse", categorycourseController.getCategoriesCourse); 
+router.post("/api/uploadcategories", upload.single("file"), categorycourseController.uploadCategories);
+router.get("/api/getcategorycourse", categorycourseController.getAllCategories);
+router.get("/api/getAllCategoriesTable", categorycourseController.getCategoriesAsTable);
+router.get("/api/getAllCategoriesTablePageLimit", categorycourseController.getCategoriesAsTablePageLimit);
+router.get("/api/getonlyCategory", categorycourseController.getOnlyCategory);
+router.get("/api/getbasedOnCategory", categorycourseController.getBasedOnCategory);
+router.get("/api/getbasedOnSubategory1", categorycourseController.getBasedOnSubCategory1);
+ 
 // notify
 router.post("/api/notify", notifyController.createNotification); 
 router.get("/api/getnotify", notifyController.getAllNotifications); 
@@ -254,5 +258,5 @@ router.post("/api/generatequiz", QuizController.generateAIQuiz);
 router.get("/api/getallquiz", QuizController.getAllQuizzes);
 router.get("/api/quizbyid", QuizController.getQuizById);
 
-router.get("/api/aggregate", DashboardController.aggregateData);
+
 module.exports = router;

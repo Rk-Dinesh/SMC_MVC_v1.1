@@ -213,7 +213,7 @@ exports.uploadCSV = async (req, res, next) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const filePath = path.join(__dirname, "./excel", req.file.filename);
+    const filePath = path.join(__dirname, "../excel", req.file.filename);
 
     const result = await UserService.uploadCSV(filePath);
 

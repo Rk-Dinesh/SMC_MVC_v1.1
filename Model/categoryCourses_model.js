@@ -1,16 +1,24 @@
 const mongoose = require("mongoose");
 
-const categoryCoursesSchema = new mongoose.Schema(
-  {
-  category: { 
-    type: String, 
-    required: true 
-  },
-  subCategory1: [String],  
-  subCategory2: [String]   
-},
-  { timestamps: true }
-);
+// Top-level categories
+const categoryCourseSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true }
+});
 
-const CategoryCourse = mongoose.model("categoryCourse", categoryCoursesSchema);
-module.exports = CategoryCourse;
+// First-level subcategories
+const subCategory1Schema = new mongoose.Schema({
+  name: { type: String, required: true },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }
+});
+
+// Second-level subcategories
+const subCategory2Schema = new mongoose.Schema({
+  name: { type: String, required: true },
+  subCategory1: { type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory1', required: true }
+});
+
+const CategoryCourse = mongoose.model('CategoryCourse', categoryCourseSchema);
+const SubCategory1 = mongoose.model('SubCategory1', subCategory1Schema);
+const SubCategory2 = mongoose.model('SubCategory2', subCategory2Schema);
+
+module.exports = { CategoryCourse, SubCategory1, SubCategory2 };
