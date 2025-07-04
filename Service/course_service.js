@@ -3,6 +3,7 @@ const Course = require("../Model/course_model");
 const { createApi } = require("unsplash-js");
 const transporter = require("./transporter_service");
 const Language = require("../Model/lang_model");
+const certificateCourse = require("../Model/certificate_model");
 const unsplash = createApi({ accessKey: process.env.UNSPLASH_ACCESS_KEY });
 
 exports.createCourse = async (courseData) => {
@@ -69,11 +70,33 @@ exports.updateCourse = async (courseId, content) => {
 };
 
 exports.finishCourse = async (courseId) => {
-  return await Course.findOneAndUpdate(
+  const course = await Course.findById(courseId);
+  if (!course) {
+    throw new Error("Course not found");
+  }
+  if (course.completed) {
+    throw new Error("Course already completed");
+  } 
+
+  const endDate = new Date();
+
+   await Course.findOneAndUpdate(
     { _id: courseId },
-    { $set: { completed: true, end: Date.now() } },
+    { $set: { completed: true, end: endDate } },
     { new: true }
   );
+
+  await certificateCourse.create({
+    courseId: courseId,
+    userId: course.user,
+    name: course.fname + " " + course.lname,
+    courseName: course.mainTopic,
+    issueDate: endDate,
+    language: course.lang,
+    type: course.type,
+    verified: true,
+  });
+  return course;
 };
 
 exports.getCoursesByUser = async (userId) => {

@@ -54,11 +54,11 @@ exports.updatePreCourse = async (req, res) => {
 exports.finishPreCourse = async (req, res) => {
   try {
     const courseId = req.body.courseId;
-    const userId = req.body.user; 
-    await exports.finishPreCourse(courseId, userId);
+    const userId = req.body.userId; 
+    await preGenerateCourse.finishPreCourse(courseId, userId);
     res.json({ success: true, message: "Pre-Course completed successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: error.message || "Internal server error" });
   }
 };
 

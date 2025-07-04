@@ -84,7 +84,7 @@ exports.finishCourse = async (req, res) => {
     await CourseService.finishCourse(req.body.courseId);
     res.json({ success: true, message: "Course completed successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: error.message || "Internal server error" });
   }
 };
 

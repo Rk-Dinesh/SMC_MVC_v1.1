@@ -2,6 +2,8 @@ require("dotenv").config();
 const Language = require("../Model/lang_model");
 const PreCourse = require("../Model/pre_genCourses_model");
 const { createApi } = require("unsplash-js");
+const User = require("../Model/user_model");
+const certificateCourse = require("../Model/certificate_model");
 const unsplash = createApi({ accessKey: process.env.UNSPLASH_ACCESS_KEY });
 
 exports.precreateCourse = async (courseData) => {
@@ -92,6 +94,16 @@ exports.updatePreCourse = async (courseId, content) => {
 };
 
 exports.finishPreCourse = async (courseId, userId) => {
+
+  const user = await User.findById(userId);
+  const preCourse = await PreCourse.findById(courseId);
+   const userEntry = preCourse.user.find(u => u.userId.toString() === userId.toString());
+
+    if (userEntry && userEntry.completed === true) {
+  
+     throw new Error("Already completed this course.");
+    }
+  const endDate = new Date();
   await PreCourse.findOneAndUpdate(
     {
       _id: courseId,
@@ -100,20 +112,27 @@ exports.finishPreCourse = async (courseId, userId) => {
     {
       $set: {
         "user.$.completed": true,
-        "user.$.endDate": new Date(),
+        "user.$.endDate": endDate,
       },
     },
     { new: true }
   );
+
+  await certificateCourse.create({
+      courseId: courseId,
+      userId: userId,
+      name: user.fname + " " + user.lname,
+      courseName: preCourse.mainTopic,
+      issueDate: endDate,
+      language: preCourse.lang,
+      type: preCourse.type,
+      verified: true,
+    });
+
+   return userEntry; 
 };
 
-// exports.finishPreCourse = async (courseId) => {
-//   return await PreCourse.findOneAndUpdate(
-//     { _id: courseId },
-//     { $set: { completed: true, end: Date.now() } },
-//     { new: true }
-//   );
-// };
+
 
 exports.getAllPreCourses = async () => {
   return await PreCourse.find({});

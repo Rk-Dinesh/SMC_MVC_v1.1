@@ -36,6 +36,7 @@ const categorycourseController = require("../Controller/categoryCourse_controlle
 const preCourseController = require("../Controller/preGenCourse_controller");
 const QuizController = require("../Controller/quiz_controller");
 const DashboardController = require("../Controller/dashboardAPI");
+const CertificateController = require("../Controller/certificate_controller");
 
 const storage = multer.diskStorage({
     destination: "excel",
@@ -258,6 +259,10 @@ router.get("/api/getbankdetailsbyuser", bankDetailsController.getAccountDetailsB
 router.post("/api/generatequiz", QuizController.generateAIQuiz);
 router.get("/api/getallquiz", QuizController.getAllQuizzes);
 router.get("/api/quizbyid", QuizController.getQuizById);
+
+//Certificate
+router.get("/api/certificate/:courseId/:userId", CertificateController.getCertificateByIdandUserId);
+router.get("/api/certificatebyuserPagelimit", CertificateController.getcertificatebyUserId);
 
 
 module.exports = router;
