@@ -156,7 +156,7 @@ exports.createSubscription = async (
 
 exports.getAllSubscriptions = async () => {
   const subscriptions = await Subscription.find();
-  if (!subscriptions || subscriptions.length === 0) {
+  if (!subscriptions ) {
     throw new Error("No subscriptions found");
   }
   return subscriptions;
@@ -164,7 +164,7 @@ exports.getAllSubscriptions = async () => {
 
 exports.getSubscriptionsByUserId = async (userId) => {
   const subscriptions = await Subscription.find({ user: userId });
-  if (!subscriptions || subscriptions.length === 0) {
+  if (!subscriptions ) {
     throw new Error("No subscriptions found for this user");
   }
   return subscriptions;
